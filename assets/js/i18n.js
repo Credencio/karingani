@@ -6,7 +6,7 @@
 (function () {
   'use strict';
   const PAGE_PT = {
- "t000": "Karingani - Dashboard de Monitoria",
+ "t000": "Karingani – Dashboard de Monitoria",
  "t001": "A linha de base (Surveys 1 e 3) regista <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"individuos\" data-fmt=\"int\" data-source=\"s13_resumo\">—</b> árvores de <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"especies\" data-fmt=\"int\" data-source=\"s13_resumo\">—</b> espécies, com o mopane a representar <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"pct\" data-fmt=\"pct1\" data-source=\"s13_abund\" data-where=\"especie=Colophospermum mopane\">—</b> dos indivíduos. No Survey 4, <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"translocar\" data-fmt=\"int\" data-source=\"s4_resumo\">—</b> das <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"arvores\" data-fmt=\"int\" data-source=\"s4_resumo\">—</b> árvores avaliadas são candidatas a translocação.",
  "t002": "Vegetação · Surveys 1 e 3",
  "t003": "Ficha de espécie",
@@ -386,7 +386,7 @@
 };
   const UI = {
  "en": {
-  "title": "Karingani - Monitoring Dashboard",
+  "title": "Karingani – Monitoring Dashboard",
   "fail": "Failed to load",
   "other": "Other species",
   "dbh": "DBH",
@@ -398,7 +398,7 @@
   "mapHiddenN": " trees without GPS or outside the main area are not shown on the map."
  },
  "pt": {
-  "title": "Karingani - Dashboard de Monitoria",
+  "title": "Karingani – Dashboard de Monitoria",
   "fail": "Falha ao carregar",
   "other": "Outras espécies",
   "dbh": "DAP",
