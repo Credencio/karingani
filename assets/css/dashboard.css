@@ -59,20 +59,38 @@
   .kx-stat-bar { display: block; height: 4px; border-radius: 2px; background: var(--cds-chart-grid); overflow: hidden; margin-top: 2px; }
   .kx-stat-bar i { display: block; height: 100%; border-radius: 2px; }
   .kx-statgrid.dash-skeleton { min-height: 90px; }
-  /* Cores dos cards: tons de verde e laranja alternados */
-  .kx { --tint-1: #e9f4ed; --line-1: #cfe5d7; --ink-1: #2f6f4e; --shade-1: rgba(47, 111, 78, .14);
-        --tint-2: #fdf1e3; --line-2: #f3d9b8; --ink-2: #c9781f; --shade-2: rgba(201, 120, 31, .16);
-        --tint-3: #eff5e2; --line-3: #d9e6bf; --ink-3: #6b8f2a; --shade-3: rgba(107, 143, 42, .15);
-        --tint-4: #fceadf; --line-4: #f1cdb6; --ink-4: #c0612b; --shade-4: rgba(192, 97, 43, .15);
-        --tint-5: #e4f2ef; --line-5: #c6e2dc; --ink-5: #2c7a6d; --shade-5: rgba(44, 122, 109, .14); }
-  .kx .kx-t1, .kx .kx-tiles > .kx-tile:nth-child(5n+1) { --tint: var(--tint-1); --tint-line: var(--line-1); --ink: var(--ink-1); --shade: var(--shade-1); }
-  .kx .kx-t2, .kx .kx-tiles > .kx-tile:nth-child(5n+2) { --tint: var(--tint-2); --tint-line: var(--line-2); --ink: var(--ink-2); --shade: var(--shade-2); }
-  .kx .kx-t3, .kx .kx-tiles > .kx-tile:nth-child(5n+3) { --tint: var(--tint-3); --tint-line: var(--line-3); --ink: var(--ink-3); --shade: var(--shade-3); }
-  .kx .kx-t4, .kx .kx-tiles > .kx-tile:nth-child(5n+4) { --tint: var(--tint-4); --tint-line: var(--line-4); --ink: var(--ink-4); --shade: var(--shade-4); }
-  .kx .kx-t5, .kx .kx-tiles > .kx-tile:nth-child(5n+5) { --tint: var(--tint-5); --tint-line: var(--line-5); --ink: var(--ink-5); --shade: var(--shade-5); }
-  .kx .kx-stat[class*="kx-t"], .kx .kx-tiles > .kx-tile { background: var(--tint); border-color: var(--tint-line); box-shadow: 0 1px 2px var(--shade), 0 4px 14px var(--shade); }
-  .kx .kx-stat .kx-stat-bar { background: var(--tint-line, var(--cds-chart-grid)); }
-  .kx .kx-stat .kx-stat-pct { color: var(--ink, var(--color-fg)); }
+  /* Cards no estilo de painel: faixa de cor no topo, ponto colorido, número em destaque e etiqueta em pílula */
+  .kx { --ink-1: #1f7a45; --soft-1: #dcefe3; --shade-1: rgba(31, 122, 69, .16);
+        --ink-2: #e39b14; --soft-2: #fcebc8; --shade-2: rgba(227, 155, 20, .18);
+        --ink-3: #5f8f1c; --soft-3: #e5f0cf; --shade-3: rgba(95, 143, 28, .16);
+        --ink-4: #d9681f; --soft-4: #fbdcc6; --shade-4: rgba(217, 104, 31, .17);
+        --ink-5: #138069; --soft-5: #d3ede7; --shade-5: rgba(19, 128, 105, .16); }
+  .kx .kx-t1, .kx .kx-tiles > .kx-tile:nth-child(5n+1) { --ink: var(--ink-1); --soft: var(--soft-1); --shade: var(--shade-1); }
+  .kx .kx-t2, .kx .kx-tiles > .kx-tile:nth-child(5n+2) { --ink: var(--ink-2); --soft: var(--soft-2); --shade: var(--shade-2); }
+  .kx .kx-t3, .kx .kx-tiles > .kx-tile:nth-child(5n+3) { --ink: var(--ink-3); --soft: var(--soft-3); --shade: var(--shade-3); }
+  .kx .kx-t4, .kx .kx-tiles > .kx-tile:nth-child(5n+4) { --ink: var(--ink-4); --soft: var(--soft-4); --shade: var(--shade-4); }
+  .kx .kx-t5, .kx .kx-tiles > .kx-tile:nth-child(5n+5) { --ink: var(--ink-5); --soft: var(--soft-5); --shade: var(--shade-5); }
+  .kx .kx-stat[class*="kx-t"], .kx .kx-tiles > .kx-tile {
+    position: relative; background: var(--color-panel); border: 1px solid var(--color-border-line); border-top: 0;
+    border-radius: 14px; padding: calc(var(--cds-pad-lg) + 5px) var(--cds-pad-lg) var(--cds-pad-lg); overflow: hidden;
+    box-shadow: 0 2px 4px var(--shade), 0 8px 22px var(--shade); gap: 6px; }
+  .kx .kx-stat[class*="kx-t"]::before, .kx .kx-tiles > .kx-tile::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 5px; background: var(--ink); }
+  .kx .kx-tiles > .kx-tile .kx-lab, .kx .kx-stat .kx-stat-lab {
+    display: flex; align-items: center; gap: 8px; text-transform: uppercase; letter-spacing: .06em;
+    font-weight: 700; font-size: .78rem; color: var(--color-fg-muted); }
+  .kx .kx-tiles > .kx-tile .kx-lab::before, .kx .kx-stat .kx-stat-lab::before {
+    content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); flex: none; }
+  .kx .kx-tiles > .kx-tile .kx-num, .kx .kx-stat .kx-stat-num {
+    font-family: var(--font-sans, var(--font-anthropic-sans)); font-weight: 800; letter-spacing: -.01em;
+    font-size: 2rem; line-height: 1.1; color: var(--color-fg); }
+  .kx .kx-tiles > .kx-tile .kx-sub {
+    justify-self: start; max-width: 100%; background: var(--soft); color: var(--ink); font-weight: 600; border-radius: 8px;
+    padding: 3px 10px; line-height: 1.35; }
+  .kx .kx-tiles { grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); }
+  .kx .kx-stat .kx-stat-pct {
+    justify-self: start; background: var(--ink); color: #fff; font-weight: 700; border-radius: 999px; padding: 3px 11px; }
+  .kx .kx-stat .kx-stat-bar { background: var(--soft); height: 5px; border-radius: 3px; margin-top: 4px; }
   .kx-map { position: relative; min-height: 260px; min-width: 0; }
   .kx-map canvas { display: block; width: 100%; border-radius: var(--cds-radius); background: var(--color-bg); border: 1px solid var(--color-border-line); }
   .kx-map svg { position: absolute; left: 0; top: 0; width: 100%; }
@@ -88,3 +106,10 @@
   @media (max-width: 560px) { .kx-methods dl { grid-template-columns: 1fr; } .kx-methods dd { margin-bottom: var(--cds-gap-sm); } }
   [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
   [data-dash-source-state=empty] { color: transparent; }
+
+/* Language switch */
+.kx-headrow { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: var(--cds-gap-md); }
+.kx-lang { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 2px; background: var(--color-panel); flex: none; }
+.kx-lang button { appearance: none; border: 0; background: none; font: inherit; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); letter-spacing: .04em; color: var(--color-fg-muted); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
+.kx-lang button[aria-pressed="true"] { background: var(--ink-1, #2f6f4e); color: #fff; }
+.kx-lang button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }

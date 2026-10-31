@@ -118,8 +118,8 @@ dash.draw('c-map-s13', (el) => {
   kx.map(el, {
     layers: [{ rows: off, color: 'var(--cds-chart-muted)', r: 1.6, alpha: 0.45 }, { rows: on, color: dash.colors[0], r: 2.4, alpha: 0.9 }],
     pick: on,
-    tip: (p) => [p.especie, ['DAP ' + kx.fmt(p.dap_cm, 'd1') + ' cm · altura ' + kx.fmt(p.altura_m, 'd1') + ' m', 'Condição: ' + (p.condicao || '—')]],
-    legend: [{ label: sp, color: dash.colors[0] }, { label: 'Outras espécies', color: 'var(--cds-chart-muted)' }]
+    tip: (p) => [p.especie, [kxT('dbh') + ' ' + kx.fmt(p.dap_cm, 'd1') + ' cm · ' + kxT('height') + ' ' + kx.fmt(p.altura_m, 'd1') + ' m', kxT('condition') + ': ' + kx.fmt(p.condicao)]],
+    legend: [{ label: sp, color: dash.colors[0] }, { label: kxT('other'), color: 'var(--cds-chart-muted)' }]
   });
 });
 dash.draw('c-map-s4', (el) => {
@@ -128,11 +128,11 @@ dash.draw('c-map-s4', (el) => {
   const by = sel ? sel.value : 'decisao';
   const rows = dash.data('s4_arvores').data;
   const cats = by === 'zona' ? ['Dentro', 'Fora'] : ['Translocar', 'Reter', 'Remover'];
-  const label = c => by === 'zona' ? c + ' da zona de construção' : c;
+  const label = c => by === 'zona' ? kxV(c) + kxT('zoneSuffix') : c;
   kx.map(el, {
     layers: cats.map((c, i) => ({ rows: rows.filter(r => r[by] === c), color: dash.colors[i], r: 3, alpha: 0.85 })),
     pick: rows,
-    tip: (p) => [(p.etiqueta || '') + ' · ' + p.especie, ['DAP ' + kx.fmt(p.dap_cm, 'd1') + ' cm · altura ' + kx.fmt(p.altura_m, 'd1') + ' m', p.decisao + ' · ' + p.zona + ' da zona']],
+    tip: (p) => [(p.etiqueta || '') + ' · ' + p.especie, [kxT('dbh') + ' ' + kx.fmt(p.dap_cm, 'd1') + ' cm · ' + kxT('height') + ' ' + kx.fmt(p.altura_m, 'd1') + ' m', kxV(p.decisao) + ' · ' + kxV(p.zona) + kxT('zoneShort')]],
     legend: cats.map((c, i) => ({ label: label(c), color: dash.colors[i] }))
   });
 });

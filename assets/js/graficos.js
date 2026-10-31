@@ -1,12 +1,17 @@
 /* Ferramentas de desenho: formatação, gráficos de barras, donuts e mapas (d3). */
 /* ---------------- Ferramentas de desenho ---------------- */
 window.kx = (() => {
-  const loc = d3.formatLocale({ decimal: ',', thousands: ' ', grouping: [3], currency: ['', ''] });
-  const F = { int: loc.format(',.0f'), d1: loc.format(',.1f'), d2: loc.format(',.2f'), d3: loc.format(',.3f'), pct1: v => loc.format(',.1f')(v) + '%', pct2: v => loc.format(',.2f')(v) + '%' };
+  // Formatos de número por língua: inglês 1,234.5 · português 1 234,5
+  const mk = (loc) => ({ int: loc.format(',.0f'), d1: loc.format(',.1f'), d2: loc.format(',.2f'), d3: loc.format(',.3f'), pct1: v => loc.format(',.1f')(v) + '%', pct2: v => loc.format(',.2f')(v) + '%' });
+  const FMT = { pt: mk(d3.formatLocale({ decimal: ',', thousands: '\u00a0', grouping: [3], currency: ['', ''] })), en: mk(d3.formatLocale({ decimal: '.', thousands: ',', grouping: [3], currency: ['', ''] })) };
+  const lang = () => (window.kxLang ? window.kxLang() : 'en');
+  const tr = (v) => (window.kxV ? window.kxV(v) : v);
+  const T = (k) => (window.kxT ? window.kxT(k) : k);
   const fmt = (v, f) => {
     if (v === null || v === undefined || v === '') return '—';
-    if (f && F[f]) { const x = Number(v); return Number.isFinite(x) ? F[f](x) : String(v); }
-    return String(v);
+    const F = FMT[lang()] || FMT.en;
+    if (f && F[f]) { const x = Number(v); return Number.isFinite(x) ? F[f](x) : tr(String(v)); }
+    return tr(String(v));
   };
   const status = (ids) => {
     let st = 'ok';
@@ -18,7 +23,7 @@ window.kx = (() => {
     el.classList.toggle('dash-skeleton', st === 'loading');
     if (st === 'ok') return true;
     el.replaceChildren();
-    if (st === 'error') { const d = document.createElement('div'); d.className = 'kx-fail'; d.append(document.createElement('i'), document.createTextNode('Falha ao carregar')); el.append(d); }
+    if (st === 'error') { const d = document.createElement('div'); d.className = 'kx-fail'; d.append(document.createElement('i'), document.createTextNode(T('fail'))); el.append(d); }
     return false;
   };
   const tipFor = (el) => { const t = document.createElement('div'); t.className = 'kx-tip'; t.hidden = true; el.append(t); return t; };
@@ -40,7 +45,7 @@ window.kx = (() => {
   const legend = (el, series, colors) => {
     if (series.length < 2) return;
     const lg = document.createElement('div'); lg.className = 'kx-legend';
-    series.forEach((s, i) => { const sp = document.createElement('span'); const sw = document.createElement('i'); sw.className = 'kx-sw'; sw.style.background = colors[i]; sp.append(sw, document.createTextNode(s.label)); lg.append(sp); });
+    series.forEach((s, i) => { const sp = document.createElement('span'); const sw = document.createElement('i'); sw.className = 'kx-sw'; sw.style.background = colors[i]; sp.append(sw, document.createTextNode(tr(s.label))); lg.append(sp); });
     el.append(lg);
   };
   const measure = (svg, texts, cls) => {
@@ -57,10 +62,10 @@ window.kx = (() => {
     const svg = d3.select(el).append('svg').attr('width', '100%').attr('role', 'img');
     const tip = tipFor(el);
     const f = v => fmt(v, o.fmt || 'int');
-    const hover = (sel) => sel.on('mousemove', (ev, d) => showTip(el, tip, ev, d.cat, S.length === 1 ? [[null, o.valueLabel || S[0].label, f(d.v)]] : S.map((s, i) => [colors[i], s.label, f(d.row[s.key])])))
+    const hover = (sel) => sel.on('mousemove', (ev, d) => showTip(el, tip, ev, tr(d.cat), S.length === 1 ? [[null, tr(o.valueLabel || S[0].label), f(d.v)]] : S.map((s, i) => [colors[i], tr(s.label), f(d.row[s.key])])))
       .on('mouseleave', () => { tip.hidden = true; });
     if (o.horizontal) {
-      let lw = Math.min(measure(svg, rows.map(r => String(r[o.cat]))), W * 0.42);
+      let lw = Math.min(measure(svg, rows.map(r => tr(String(r[o.cat])))), W * 0.42);
       const vw = measure(svg, [f(maxV)], 'kx-vlab');
       const band = S.length > 1 ? 12 * S.length + 10 : 24;
       const m = { t: 4, r: vw + 12, b: 22, l: lw + 10 };
@@ -73,7 +78,7 @@ window.kx = (() => {
       svg.append('g').selectAll('line').data(ticks).join('line').attr('class', 'kx-grid-line').attr('x1', d => x(d)).attr('x2', d => x(d)).attr('y1', m.t).attr('y2', H - m.b);
       svg.append('g').selectAll('text').data(ticks).join('text').attr('class', 'kx-tick').attr('x', d => x(d)).attr('y', H - 6).attr('text-anchor', 'middle').text(d => f(d));
       svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'kx-tick').attr('x', m.l - 8).attr('y', r => y(String(r[o.cat])) + y.bandwidth() / 2).attr('dy', '0.35em').attr('text-anchor', 'end')
-        .text(r => String(r[o.cat])).each(function () { let s = this.textContent; while (s.length > 3 && this.getComputedTextLength() > lw) { s = s.slice(0, -2); this.textContent = s + '…'; } });
+        .text(r => tr(String(r[o.cat]))).each(function () { let s = this.textContent; while (s.length > 3 && this.getComputedTextLength() > lw) { s = s.slice(0, -2); this.textContent = s + '…'; } });
       const data = rows.flatMap(r => S.map((s, i) => ({ cat: String(r[o.cat]), key: s.key, v: Number(r[s.key]) || 0, i, row: r })));
       svg.append('g').selectAll('rect').data(data).join('rect').attr('x', m.l).attr('y', d => y(d.cat) + ys(d.key)).attr('height', Math.min(ys.bandwidth(), 28)).attr('width', d => Math.max(0, x(d.v) - m.l)).attr('rx', 2).attr('fill', d => colors[d.i]).call(hover);
       if (S.length === 1) svg.append('g').selectAll('text').data(data).join('text').attr('class', 'kx-vlab').attr('x', d => x(d.v) + 4).attr('y', d => y(d.cat) + ys(d.key) + Math.min(ys.bandwidth(), 28) / 2).attr('dy', '0.35em').text(d => f(d.v));
@@ -86,7 +91,7 @@ window.kx = (() => {
       const lw = measure(svg, yt.map(f));
       const m = { t: 18, r: 8, b: 30, l: lw + 10 };
       const x = d3.scaleBand(x0, [m.l, W - m.r]).paddingInner(0.25).paddingOuter(0.1);
-      const catW = measure(svg, x0);
+      const catW = measure(svg, x0.map(tr));
       const rotate = catW > x.bandwidth() + 8;
       const bExtra = rotate ? Math.min(catW, 120) * 0.6 : 0;
       const Ht = H + bExtra;
@@ -95,7 +100,7 @@ window.kx = (() => {
       const xs = d3.scaleBand(S.map(s => s.key), [0, x.bandwidth()]).padding(0.08);
       svg.append('g').selectAll('line').data(yt).join('line').attr('class', 'kx-grid-line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', d => y(d)).attr('y2', d => y(d));
       svg.append('g').selectAll('text').data(yt).join('text').attr('class', 'kx-tick').attr('x', m.l - 6).attr('y', d => y(d)).attr('dy', '0.35em').attr('text-anchor', 'end').text(d => f(d));
-      const cl = svg.append('g').selectAll('text').data(x0).join('text').attr('class', 'kx-tick').text(d => d);
+      const cl = svg.append('g').selectAll('text').data(x0).join('text').attr('class', 'kx-tick').text(d => tr(d));
       if (rotate) cl.attr('transform', d => `translate(${x(d) + x.bandwidth() / 2},${H - m.b + 12}) rotate(-35)`).attr('text-anchor', 'end').attr('dy', '0.35em');
       else cl.attr('x', d => x(d) + x.bandwidth() / 2).attr('y', H - m.b + 16).attr('text-anchor', 'middle');
       const bw = Math.min(xs.bandwidth(), 32);
@@ -117,13 +122,13 @@ window.kx = (() => {
     const arcs = d3.pie().sort(null).value(r => Number(r[o.val]))(rows);
     const arc = d3.arc().innerRadius(size * 0.3).outerRadius(size / 2 - 2).padAngle(0.01);
     svg.append('g').attr('transform', `translate(${size / 2},${size / 2})`).selectAll('path').data(arcs).join('path').attr('d', arc).attr('fill', (d, i) => colors[i])
-      .on('mousemove', (ev, d) => showTip(el, tip, ev, String(d.data[o.cat]), [[null, null, fmt(d.data[o.val], 'int') + (o.pct ? ' · ' + fmt(d.data[o.pct], 'pct1') : '')]]))
+      .on('mousemove', (ev, d) => showTip(el, tip, ev, tr(String(d.data[o.cat])), [[null, null, fmt(d.data[o.val], 'int') + (o.pct ? ' · ' + fmt(d.data[o.pct], 'pct1') : '')]]))
       .on('mouseleave', () => { tip.hidden = true; });
     const list = document.createElement('div'); list.className = 'kx-dlist';
     rows.forEach((r, i) => {
       const d = document.createElement('div');
       const sw = document.createElement('i'); sw.className = 'kx-sw'; sw.style.background = colors[i];
-      const a = document.createElement('span'); a.textContent = String(r[o.cat]);
+      const a = document.createElement('span'); a.textContent = tr(String(r[o.cat]));
       const b = document.createElement('span'); b.textContent = fmt(r[o.val], 'int');
       const c = document.createElement('span'); c.className = 'kx-p'; c.textContent = o.pct ? fmt(r[o.pct], 'pct1') : '';
       d.append(sw, a, b, c); list.append(d);
@@ -176,14 +181,14 @@ window.kx = (() => {
       const [head, lines] = o.tip(p); showTip(el, tip, ev, head, lines.map(t => [null, null, t]));
     }).on('mouseleave', () => { tip.hidden = true; });
     if (o.legend) legend(el, o.legend.map(x => ({ label: x.label })), o.legend.map(x => x.color));
-    if (hiddenN) { const n = document.createElement('p'); n.className = 'kx-note'; n.textContent = fmt(hiddenN, 'int') + (hiddenN === 1 ? ' árvore sem GPS ou fora da área principal não aparece no mapa.' : ' árvores sem GPS ou fora da área principal não aparecem no mapa.'); el.append(n); }
+    if (hiddenN) { const n = document.createElement('p'); n.className = 'kx-note'; n.textContent = fmt(hiddenN, 'int') + (hiddenN === 1 ? T('mapHidden1') : T('mapHiddenN')); el.append(n); }
   };
   // Cards: um por categoria, com o valor, a percentagem e uma barra de proporção.
   const cards = (el, o) => {
     el.replaceChildren();
     o.rows.forEach((r, i) => {
       const c = document.createElement('div'); c.className = 'kx-stat kx-t' + (i % 5 + 1);
-      const l = document.createElement('span'); l.className = 'kx-stat-lab'; l.textContent = String(r[o.cat]);
+      const l = document.createElement('span'); l.className = 'kx-stat-lab'; l.textContent = tr(String(r[o.cat]));
       const v = document.createElement('b'); v.className = 'kx-stat-num'; v.textContent = fmt(r[o.val], 'int');
       const p = document.createElement('span'); p.className = 'kx-stat-pct'; p.textContent = o.pct ? fmt(r[o.pct], 'pct1') : '';
       const bar = document.createElement('i'); bar.className = 'kx-stat-bar';
