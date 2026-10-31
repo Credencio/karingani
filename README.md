@@ -1,4 +1,4 @@
-# Karingani Node A – Ecological Monitoring
+# Karingani - Monitoring Dashboard
 
 Static dashboard with the results of the vegetation surveys (Surveys 1 to 4) and the final fauna report for Node A, Karingani Game Reserve. It needs no server or database: the browser reads the JSON files in `data/` and runs every calculation (IVI, DBH and height classes, diversity indices, translocation decisions).
 

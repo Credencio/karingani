@@ -6,13 +6,13 @@
 (function () {
   'use strict';
   const PAGE_PT = {
- "t000": "Karingani Node A – Monitoria ecológica",
+ "t000": "Karingani - Dashboard de Monitoria",
  "t001": "A linha de base (Surveys 1 e 3) regista <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"individuos\" data-fmt=\"int\" data-source=\"s13_resumo\">—</b> árvores de <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"especies\" data-fmt=\"int\" data-source=\"s13_resumo\">—</b> espécies, com o mopane a representar <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"pct\" data-fmt=\"pct1\" data-source=\"s13_abund\" data-where=\"especie=Colophospermum mopane\">—</b> dos indivíduos. No Survey 4, <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"translocar\" data-fmt=\"int\" data-source=\"s4_resumo\">—</b> das <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"arvores\" data-fmt=\"int\" data-source=\"s4_resumo\">—</b> árvores avaliadas são candidatas a translocação.",
  "t002": "Vegetação · Surveys 1 e 3",
  "t003": "Ficha de espécie",
  "t004": "Estratos · Survey 2",
  "t005": "Translocação · Survey 4",
- "t006": "Fauna · Relatório final",
+ "t006": "Fauna",
  "t007": "Métodos",
  "t008": "Composição, estrutura e diversidade da comunidade arbórea, calculadas a partir dos registos individuais das árvores. A densidade usa a área de referência de 60 ha, como na folha de análise.",
  "t009": "Indivíduos",
@@ -386,7 +386,7 @@
 };
   const UI = {
  "en": {
-  "title": "Karingani Node A – Ecological Monitoring",
+  "title": "Karingani - Monitoring Dashboard",
   "fail": "Failed to load",
   "other": "Other species",
   "dbh": "DBH",
@@ -398,7 +398,7 @@
   "mapHiddenN": " trees without GPS or outside the main area are not shown on the map."
  },
  "pt": {
-  "title": "Karingani Node A – Monitoria Ecológica",
+  "title": "Karingani - Dashboard de Monitoria",
   "fail": "Falha ao carregar",
   "other": "Outras espécies",
   "dbh": "DAP",
