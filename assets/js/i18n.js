@@ -12,7 +12,7 @@
  "t003": "Ficha de espécie",
  "t004": "Estratos · Survey 2",
  "t005": "Translocação · Survey 4",
- "t006": "Fauna · Relatório final",
+ "t006": "Fauna",
  "t007": "Métodos",
  "t008": "Composição, estrutura e diversidade da comunidade arbórea, calculadas a partir dos registos individuais das árvores. A densidade usa a área de referência de 60 ha, como na folha de análise.",
  "t009": "Indivíduos",
