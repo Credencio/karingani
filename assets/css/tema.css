@@ -1,0 +1,89 @@
+/* Tema do dashboard: cores, tipografia e espaçamentos (fundo branco). */
+:root {
+  color-scheme: light;
+  --font-sans: "Source Sans 3", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+
+  --color-bg: #ffffff;
+  --color-tint: #f7f8f4;
+  --color-panel: #ffffff;
+  --card-shadow: 0 1px 2px rgba(20, 30, 20, .05), 0 2px 8px rgba(20, 30, 20, .04);
+  --color-fg: #1f2a22;
+  --color-fg-muted: #5d665e;
+  --color-border-line: #dfe1d8;
+  --color-ok: #2e7d4f;
+  --color-warn: #a86b12;
+  --color-bad: #b3412e;
+
+  --series-1: #2f6f4e;
+  --series-2: #c08a2e;
+  --series-3: #9a4f3a;
+  --series-4: #3c78a0;
+  --series-5: #7a68a6;
+  --series-6: #8f9a34;
+  --series-7: #b05876;
+  --series-8: #4f8a88;
+
+  --cds-chart-grid: #e8e9e2;
+  --cds-chart-axis: #b7bbb0;
+  --cds-chart-muted: #c3c7bd;
+  --cds-surface-popover: #ffffff;
+  --cds-border: #d6d9cf;
+  --cds-shadow-popover: 0 4px 14px rgba(20, 30, 20, .12);
+  --cds-text-secondary: #5d665e;
+
+  --cds-font-size-caption: 0.8125rem;
+  --cds-font-size-body: 0.9375rem;
+  --cds-font-size-heading: 1.0625rem;
+  --cds-font-size-title: 1.75rem;
+  --cds-font-weight-medium: 600;
+
+  --cds-gap-xs: 4px;
+  --cds-gap-sm: 8px;
+  --cds-gap-md: 14px;
+  --cds-gap-lg: 20px;
+  --cds-gap-xl: 32px;
+  --cds-pad-xs: 4px;
+  --cds-pad-sm: 8px;
+  --cds-pad-md: 12px;
+  --cds-pad-lg: 18px;
+  --cds-pad-xl: 28px;
+  --cds-radius: 8px;
+  --cds-dur-slow: 300ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: var(--cds-font-size-body);
+  line-height: 1.4;
+}
+#dash-root {
+  padding-block: clamp(20px, 3vw, 40px) 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px), 3vw);
+  padding-right: max(16px, env(safe-area-inset-right, 0px), 3vw);
+}
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+
+/* Estado de carregamento */
+.dash-skeleton { color: transparent !important; position: relative; }
+.dash-skeleton::after {
+  content: ""; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+  width: min(100%, 5em); height: .9em; border-radius: 6px;
+  background: var(--color-border-line);
+}
+.kx-chart.dash-skeleton::after, .kx-map.dash-skeleton::after { top: 0; transform: none; width: 100%; height: 100%; min-height: 200px; border-radius: var(--cds-radius); opacity: .5; }
+@media (prefers-reduced-motion: no-preference) {
+  .dash-skeleton::after { animation: kx-pulse 1.4s ease-in-out infinite; }
+  @keyframes kx-pulse { 50% { opacity: .35; } }
+}
+
+.kx-foot { margin: var(--cds-gap-xl) auto 0; max-width: 1400px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+
+.kx-card { box-shadow: var(--card-shadow); }
+.kx-map canvas { background: #fbfcf9; }

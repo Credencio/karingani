@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Karingani Node A – Monitoria Ecológica</title>
+  <meta name="description" content="Dashboard de monitoria ecológica do Node A, Karingani Game Reserve: vegetação, estratos, translocação de árvores e fauna.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
+  <link rel="stylesheet" href="assets/css/tema.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+<div id="dash-root">
+<div class="kx">
+  <header class="kx-head">
+    <h1 class="kx-title" id="topo">Karingani Node A – Monitoria ecológica</h1>
+    <p class="kx-lede">A linha de base (Surveys 1 e 3) regista <b data-draw="val" class="dash-skeleton" data-source="s13_resumo" data-field="individuos" data-fmt="int">—</b> árvores de <b data-draw="val" class="dash-skeleton" data-source="s13_resumo" data-field="especies" data-fmt="int">—</b> espécies, com o mopane a representar <b data-draw="val" class="dash-skeleton" data-source="s13_abund" data-where="especie=Colophospermum mopane" data-field="pct" data-fmt="pct1">—</b> dos indivíduos. No Survey 4, <b data-draw="val" class="dash-skeleton" data-source="s4_resumo" data-field="translocar" data-fmt="int">—</b> das <b data-draw="val" class="dash-skeleton" data-source="s4_resumo" data-field="arvores" data-fmt="int">—</b> árvores avaliadas são candidatas a translocação.</p>
+  </header>
+
+  <nav class="kx-tabs" role="tablist" aria-label="Secções">
+    <button class="kx-tab" role="tab" data-tab="vegetacao" aria-selected="true">Vegetação · Surveys 1 e 3</button>
+    <button class="kx-tab" role="tab" data-tab="especies" aria-selected="false">Ficha de espécie</button>
+    <button class="kx-tab" role="tab" data-tab="estratos" aria-selected="false">Estratos · Survey 2</button>
+    <button class="kx-tab" role="tab" data-tab="translocacao" aria-selected="false">Translocação · Survey 4</button>
+    <button class="kx-tab" role="tab" data-tab="fauna" aria-selected="false">Fauna · Relatório final</button>
+    <button class="kx-tab" role="tab" data-tab="metodos" aria-selected="false">Métodos</button>
+  </nav>
+
+  <!-- ============ VEGETAÇÃO ============ -->
+  <section class="kx-page" id="vegetacao">
+    <p class="kx-intro">Composição, estrutura e diversidade da comunidade arbórea, calculadas a partir dos registos individuais das árvores. A densidade usa a área de referência de 60 ha, como na folha de análise.</p>
+    <div class="kx-tiles">
+      <div class="kx-tile"><span class="kx-lab">Indivíduos</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s13_resumo" data-field="individuos" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Espécies</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s13_resumo" data-field="especies" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Famílias</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s13_resumo" data-field="familias" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">DAP médio (cm)</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s13_resumo" data-field="dap_medio" data-fmt="d1">—</b><span class="kx-sub">mín. <span data-draw="val" data-source="s13_resumo" data-field="dap_min" data-fmt="d1">—</span> · máx. <span data-draw="val" data-source="s13_resumo" data-field="dap_max" data-fmt="d1">—</span> · DP <span data-draw="val" data-source="s13_resumo" data-field="dap_dp" data-fmt="d2">—</span></span></div>
+      <div class="kx-tile"><span class="kx-lab">Shannon (H′)</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s13_resumo" data-field="shannon" data-fmt="d2">—</b><span class="kx-sub">Diversidade baixa a moderada</span></div>
+      <div class="kx-tile"><span class="kx-lab">Simpson (1 − D)</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s13_resumo" data-field="simpson" data-fmt="d2">—</b><span class="kx-sub">Diversidade moderada</span></div>
+      <div class="kx-tile"><span class="kx-lab">Pielou (J′)</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s13_resumo" data-field="pielou" data-fmt="d2">—</b><span class="kx-sub">Baixa uniformidade</span></div>
+    </div>
+
+    <h2 class="kx-h2" id="veg-composicao">Composição florística</h2>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s13-ivi">
+        <h3>Índice de Valor de Importância</h3>
+        <p class="kx-note">IVI = densidade relativa + frequência relativa + dominância relativa (área basal). 15 espécies com IVI mais alto.</p>
+        <div class="kx-chart" data-draw="c-s13-ivi" data-source="s13_ivi"></div>
+      </div>
+      <div class="kx-card" id="card-s13-familias">
+        <h3>Indivíduos por família</h3>
+        <p class="kx-note">Representatividade de cada família no total de indivíduos.</p>
+        <div class="kx-chart" data-draw="c-s13-fam" data-source="s13_familias"></div>
+      </div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s13-abund">
+        <h3>Espécies mais abundantes</h3>
+        <p class="kx-note">As nove espécies com mais indivíduos e a sua percentagem no total.</p>
+        <div class="kx-tbox"><table class="kx-table" data-source="s13_abund" data-row-key="especie" data-kx-filter="grupo=Abundante">
+          <thead><tr><th data-field="especie">Espécie</th><th data-field="familia">Família</th><th data-field="individuos" data-fmt="int" class="n">Indivíduos</th><th data-field="pct" data-fmt="pct2" class="n">% do total</th></tr></thead>
+          <tbody data-draw="tbl"></tbody></table></div>
+      </div>
+      <div class="kx-card" id="card-s13-raras">
+        <h3>Espécies raras</h3>
+        <p class="kx-note">As nove espécies com menos indivíduos.</p>
+        <div class="kx-tbox"><table class="kx-table" data-source="s13_abund" data-row-key="especie" data-kx-filter="grupo=Rara">
+          <thead><tr><th data-field="especie">Espécie</th><th data-field="familia">Família</th><th data-field="individuos" data-fmt="int" class="n">Indivíduos</th><th data-field="pct" data-fmt="pct2" class="n">% do total</th></tr></thead>
+          <tbody data-draw="tbl"></tbody></table></div>
+      </div>
+    </div>
+
+    <h2 class="kx-h2" id="veg-estrutura">Estrutura da vegetação</h2>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s13-dap">
+        <h3>Distribuição diamétrica</h3>
+        <p class="kx-note">Número de árvores por classe de DAP (cm).</p>
+        <div class="kx-chart" data-draw="c-s13-dap" data-source="s13_dap"></div>
+      </div>
+      <div class="kx-card" id="card-s13-alt">
+        <h3>Classes de altura</h3>
+        <p class="kx-note">Número de árvores por classe de altura.</p>
+        <div class="kx-chart" data-draw="c-s13-alt" data-source="s13_altura"></div>
+      </div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s13-rep"><h3>Estado reprodutivo</h3><p class="kx-note">Árvores com sinais de reprodução (flores, frutos).</p><div class="kx-statgrid" data-draw="c-s13-estado" data-kx-ind="Estado reprodutivo" data-source="s13_estado"></div></div>
+      <div class="kx-card" id="card-s13-iucn"><h3>Estado de conservação (IUCN)</h3><p class="kx-note">LC: pouco preocupante · NE: não avaliada.</p><div class="kx-statgrid" data-draw="c-s13-estado" data-kx-ind="IUCN" data-source="s13_estado"></div></div>
+      <div class="kx-card" id="card-s13-fito"><h3>Estado fitossanitário</h3><p class="kx-note">Saúde da árvore registada no campo.</p><div class="kx-statgrid" data-draw="c-s13-estado" data-kx-ind="Fitossanitário" data-source="s13_estado"></div></div>
+      <div class="kx-card" id="card-s13-cond"><h3>Condição</h3><p class="kx-note">Árvores vivas, mortas e caídas.</p><div class="kx-statgrid" data-draw="c-s13-estado" data-kx-ind="Condição" data-source="s13_estado"></div></div>
+    </div>
+
+    <h2 class="kx-h2" id="veg-funcoes">Funções ecológicas e retenção</h2>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s13-func">
+        <h3>Principais funções ecológicas das árvores</h3>
+        <p class="kx-note">Sombra: copa ≥ 5 m · Alimentação: árvores reprodutivas · Abrigo e carbono: DAP ≥ 30 cm · Solo: estabilização do solo registada · Fixação de N: família Fabaceae. Uma árvore pode ter várias funções.</p>
+        <div class="kx-statgrid" data-draw="c-s13-func" data-source="s13_funcoes"></div>
+      </div>
+      <div class="kx-card" id="card-s13-prio">
+        <h3>Prioridade para retenção</h3>
+        <p class="kx-note">Número de árvores por classe de prioridade, como atribuído na folha de análise.</p>
+        <div class="kx-chart" data-draw="c-s13-prio" data-source="s13_prioridade"></div>
+      </div>
+    </div>
+
+    <div class="kx-card" id="card-s13-ivi-tab">
+      <h3>Tabela fitossociológica</h3>
+      <p class="kx-note">DA: indivíduos/ha · DR: densidade relativa · FA/FR: frequência absoluta/relativa · DoA: área basal (m²/ha) · DoR: dominância relativa. Área basal = 3,14 × DAP² / 40 000.</p>
+      <div class="kx-tbox"><table class="kx-table" data-source="s13_ivi" data-row-key="especie">
+        <thead><tr><th data-field="especie">Espécie</th><th data-field="familia">Família</th><th data-field="individuos" data-fmt="int" class="n">N</th><th data-field="da" data-fmt="d2" class="n">DA</th><th data-field="dr" data-fmt="d2" class="n">DR (%)</th><th data-field="fa" data-fmt="d3" class="n">FA</th><th data-field="fr" data-fmt="d2" class="n">FR (%)</th><th data-field="doa" data-fmt="d3" class="n">DoA</th><th data-field="dor" data-fmt="d2" class="n">DoR (%)</th><th data-field="ivi" data-fmt="d2" class="n">IVI</th></tr></thead>
+        <tbody data-draw="tbl"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ============ FICHA DE ESPÉCIE ============ -->
+  <section class="kx-page" id="especies" hidden>
+    <p class="kx-intro">Escolha uma espécie para ver os seus números nos três levantamentos de vegetação, a estrutura diamétrica e onde as árvores foram registadas.</p>
+    <label class="kx-pick">Espécie
+      <select class="kx-select" id="kx-especie" data-draw="sel-especie" data-source="especies_ficha" aria-label="Espécie"></select>
+    </label>
+
+    <h2 class="kx-h2" id="sp-base">Linha de base · Surveys 1 e 3</h2>
+    <div class="kx-tiles">
+      <div class="kx-tile"><span class="kx-lab">Indivíduos</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s13_n" data-fmt="int">—</b><span class="kx-sub"><span data-draw="ficha" data-source="especies_ficha" data-field="s13_pct" data-fmt="pct2">—</span> do total</span></div>
+      <div class="kx-tile"><span class="kx-lab">IVI</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s13_ivi" data-fmt="d1">—</b><span class="kx-sub">Posição <span data-draw="ficha" data-source="especies_ficha" data-field="s13_posicao_ivi" data-fmt="int">—</span> no ranking</span></div>
+      <div class="kx-tile"><span class="kx-lab">DAP médio (cm)</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s13_dap_medio" data-fmt="d1">—</b><span class="kx-sub">Altura média <span data-draw="ficha" data-source="especies_ficha" data-field="s13_altura_media" data-fmt="d1">—</span> m</span></div>
+      <div class="kx-tile"><span class="kx-lab">Reprodutivas</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s13_reprod_pct" data-fmt="pct1">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Saudáveis</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s13_saudavel_pct" data-fmt="pct1">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Categoria IUCN</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="iucn">—</b></div>
+    </div>
+
+    <h2 class="kx-h2" id="sp-s2">Estratos · Survey 2</h2>
+    <div class="kx-tiles">
+      <div class="kx-tile"><span class="kx-lab">Árvores</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s2_arvores" data-fmt="int">—</b><span class="kx-sub">Herbáceas <span data-draw="ficha" data-source="especies_ficha" data-field="s2_herbaceas" data-fmt="int">—</span> · Matagal <span data-draw="ficha" data-source="especies_ficha" data-field="s2_matagal" data-fmt="int">—</span> · Moita <span data-draw="ficha" data-source="especies_ficha" data-field="s2_moita" data-fmt="int">—</span></span></div>
+      <div class="kx-tile"><span class="kx-lab">Regeneração</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s2_regeneracao" data-fmt="int">—</b><span class="kx-sub">registos de plântulas e rebentos</span></div>
+      <div class="kx-tile"><span class="kx-lab">Parcelas com a espécie</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s2_parcelas" data-fmt="int">—</b><span class="kx-sub">com árvores ou regeneração da espécie</span></div>
+    </div>
+
+    <h2 class="kx-h2" id="sp-s4">Translocação · Survey 4</h2>
+    <div class="kx-tiles">
+      <div class="kx-tile"><span class="kx-lab">Árvores avaliadas</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s4_arvores" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Translocar</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s4_translocar" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Reter</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s4_reter" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Remover</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="s4_remover" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Sobrevivência estimada</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="sobrevivencia_estimada">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Prioridade de translocação</span><b class="kx-num dash-skeleton" data-draw="ficha" data-source="especies_ficha" data-field="prioridade">—</b></div>
+    </div>
+
+    <div class="kx-grid">
+      <div class="kx-card" id="card-sp-dap">
+        <h3>Distribuição diamétrica da espécie</h3>
+        <p class="kx-note">Árvores da espécie por classe de DAP (cm), Surveys 1 e 3.</p>
+        <div class="kx-chart" data-draw="c-sp-dap" data-source="s13_dap_especie"></div>
+      </div>
+      <div class="kx-card" id="card-sp-mapa">
+        <h3>Onde a espécie foi registada</h3>
+        <p class="kx-note">Posição GPS de cada árvore dos Surveys 1 e 3. A espécie escolhida está a cor; as restantes a cinzento.</p>
+        <div class="kx-map" data-draw="c-map-s13" data-source="s13_arvores"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ESTRATOS ============ -->
+  <section class="kx-page" id="estratos" hidden>
+    <p class="kx-intro">Análise por estrato (Herbáceas, Matagal, Moita) para árvores, regeneração, gramíneas e arbustos. Cada parcela tem 0,1 ha, como nas densidades da folha.</p>
+    <div class="kx-card" id="card-s2-resumo">
+      <h3>Esforço de amostragem por estrato</h3>
+      <p class="kx-note">Parcelas, área e número de registos de cada grupo.</p>
+      <div class="kx-tbox"><table class="kx-table kx-plain" data-source="s2_resumo" data-row-key="estrato">
+        <thead><tr><th data-field="estrato">Estrato</th><th data-field="parcelas" data-fmt="int" class="n">Parcelas</th><th data-field="area_ha" data-fmt="d1" class="n">Área (ha)</th><th data-field="arvores" data-fmt="int" class="n">Árvores</th><th data-field="regeneracao" data-fmt="int" class="n">Regeneração</th><th data-field="gramineas" data-fmt="int" class="n">Gramíneas</th><th data-field="arbustos" data-fmt="int" class="n">Arbustos</th><th data-field="dens_arvores" data-fmt="d1" class="n">Árvores/ha</th></tr></thead>
+        <tbody data-draw="tbl"></tbody></table></div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s2-classes">
+        <div class="kx-row"><h3>Distribuição por classes</h3>
+          <select class="kx-select" id="kx-s2-var" aria-label="Variável">
+            <option value="Árvores|dap">Árvores · diâmetro (DAP)</option>
+            <option value="Árvores|altura">Árvores · altura</option>
+            <option value="Árvores|reprodutivo">Árvores · estado reprodutivo</option>
+            <option value="Regeneração|origem">Regeneração · proveniência</option>
+            <option value="Regeneração|altura">Regeneração · altura</option>
+            <option value="Gramíneas|diametro">Gramíneas · diâmetro da touceira</option>
+            <option value="Gramíneas|altura">Gramíneas · altura</option>
+            <option value="Arbustos|altura">Arbustos · altura</option>
+            <option value="Arbustos|iucn">Arbustos · IUCN</option>
+          </select></div>
+        <p class="kx-note">Número de registos por classe, uma barra por estrato.</p>
+        <div class="kx-chart" data-draw="c-s2-classes" data-source="s2_classes"></div>
+      </div>
+      <div class="kx-card" id="card-s2-div">
+        <div class="kx-row"><h3>Índices de diversidade</h3>
+          <select class="kx-select" id="kx-s2-grupo" aria-label="Grupo">
+            <option value="Árvores">Árvores</option>
+            <option value="Regeneração">Regeneração</option>
+            <option value="Gramíneas">Gramíneas</option>
+            <option value="Arbustos">Arbustos</option>
+          </select></div>
+        <p class="kx-note">Shannon (H′), Simpson (1 − D) e Pielou (J′) por estrato.</p>
+        <div class="kx-chart" data-draw="c-s2-div" data-source="s2_diversidade"></div>
+      </div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s2-ivi">
+        <h3>IVI das árvores</h3>
+        <p class="kx-note">Frequência = parcelas onde a espécie ocorre; densidade e dominância por hectare.</p>
+        <div class="kx-chart" data-draw="c-s2-ivi" data-source="s2_ivi"></div>
+      </div>
+      <div class="kx-card" id="card-s2-ni">
+        <h3>Indivíduos por espécie e estrato</h3>
+        <p class="kx-note">Árvores das dez espécies mais abundantes.</p>
+        <div class="kx-chart" data-draw="c-s2-ni" data-source="s2_ivi"></div>
+      </div>
+    </div>
+    <div class="kx-card" id="card-s2-dom">
+      <h3>Espécies dominantes em cada estrato</h3>
+      <p class="kx-note">As três espécies com mais registos por grupo e estrato.</p>
+      <div class="kx-tbox"><table class="kx-table kx-plain" data-source="s2_dominantes" data-row-key="grupo,estrato">
+        <thead><tr><th data-field="grupo">Grupo</th><th data-field="estrato">Estrato</th><th data-field="especies_dominantes">Espécies dominantes (registos)</th></tr></thead>
+        <tbody data-draw="tbl"></tbody></table></div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s2-div-tab">
+        <h3>Diversidade por grupo e estrato</h3>
+        <p class="kx-note">"Todos" junta os três estratos.</p>
+        <div class="kx-tbox"><table class="kx-table kx-plain" data-source="s2_diversidade" data-row-key="grupo,estrato">
+          <thead><tr><th data-field="grupo">Grupo</th><th data-field="estrato">Estrato</th><th data-field="registos" data-fmt="int" class="n">Registos</th><th data-field="especies" data-fmt="int" class="n">Espécies</th><th data-field="shannon" data-fmt="d2" class="n">H′</th><th data-field="simpson" data-fmt="d2" class="n">1 − D</th><th data-field="pielou" data-fmt="d2" class="n">J′</th></tr></thead>
+          <tbody data-draw="tbl"></tbody></table></div>
+      </div>
+      <div class="kx-card" id="card-s2-ivi-tab">
+        <h3>Tabela fitossociológica das árvores</h3>
+        <p class="kx-note">Todas as espécies arbóreas, com indivíduos por estrato.</p>
+        <div class="kx-tbox"><table class="kx-table" data-source="s2_ivi" data-row-key="especie">
+          <thead><tr><th data-field="especie">Espécie</th><th data-field="Herbaceas" data-fmt="int" class="n">Herb.</th><th data-field="Matagal" data-fmt="int" class="n">Matagal</th><th data-field="Moita" data-fmt="int" class="n">Moita</th><th data-field="individuos" data-fmt="int" class="n">N</th><th data-field="parcelas" data-fmt="int" class="n">Parcelas</th><th data-field="dr" data-fmt="d2" class="n">DR (%)</th><th data-field="fr" data-fmt="d2" class="n">FR (%)</th><th data-field="dor" data-fmt="d2" class="n">DoR (%)</th><th data-field="ivi" data-fmt="d2" class="n">IVI</th></tr></thead>
+          <tbody data-draw="tbl"></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TRANSLOCAÇÃO ============ -->
+  <section class="kx-page" id="translocacao" hidden>
+    <p class="kx-intro">Decisão de manejo de cada árvore avaliada no Survey 4 (translocar, reter ou remover), a sua estrutura e os critérios de translocação por espécie.</p>
+    <div class="kx-tiles">
+      <div class="kx-tile"><span class="kx-lab">Árvores avaliadas</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s4_resumo" data-field="arvores" data-fmt="int">—</b><span class="kx-sub"><span data-draw="val" data-source="s4_resumo" data-field="especies" data-fmt="int">—</span> espécies</span></div>
+      <div class="kx-tile"><span class="kx-lab">A translocar</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s4_resumo" data-field="translocar" data-fmt="int">—</b><span class="kx-sub" data-draw="val" data-source="s4_resumo" data-field="pct_translocar" data-fmt="pct1">—</span></div>
+      <div class="kx-tile"><span class="kx-lab">A reter</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s4_resumo" data-field="reter" data-fmt="int">—</b><span class="kx-sub" data-draw="val" data-source="s4_resumo" data-field="pct_reter" data-fmt="pct1">—</span></div>
+      <div class="kx-tile"><span class="kx-lab">A remover</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s4_resumo" data-field="remover" data-fmt="int">—</b><span class="kx-sub" data-draw="val" data-source="s4_resumo" data-field="pct_remover" data-fmt="pct1">—</span></div>
+      <div class="kx-tile"><span class="kx-lab">Dentro da zona de construção</span><b class="kx-num dash-skeleton" data-draw="val" data-source="s4_resumo" data-field="dentro" data-fmt="int">—</b><span class="kx-sub" data-draw="val" data-source="s4_resumo" data-field="pct_dentro" data-fmt="pct1">—</span></div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s4-esp">
+        <h3>Árvores por espécie e decisão</h3>
+        <p class="kx-note">Número de indivíduos a translocar, reter e remover.</p>
+        <div class="kx-chart" data-draw="c-s4-esp" data-source="s4_especies"></div>
+      </div>
+      <div class="kx-card" id="card-s4-dec">
+        <h3>Decisão de manejo</h3>
+        <p class="kx-note">Percentagem do total de árvores avaliadas.</p>
+        <div class="kx-statgrid" data-draw="c-s4-donut" data-kx-src="s4_decisao" data-kx-cat="decisao" data-source="s4_decisao"></div>
+        <h3>Dentro vs. fora da zona de construção</h3>
+        <div class="kx-statgrid" data-draw="c-s4-donut" data-kx-src="s4_zona" data-kx-cat="zona" data-source="s4_zona"></div>
+      </div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-s4-dap">
+        <h3>Distribuição de DAP por decisão</h3>
+        <p class="kx-note">Número de árvores por classe de DAP (cm).</p>
+        <div class="kx-chart" data-draw="c-s4-classes" data-kx-var="dap" data-source="s4_classes"></div>
+      </div>
+      <div class="kx-card" id="card-s4-alt">
+        <h3>Distribuição de altura por decisão</h3>
+        <p class="kx-note">Número de árvores por classe de altura (m).</p>
+        <div class="kx-chart" data-draw="c-s4-classes" data-kx-var="altura" data-source="s4_classes"></div>
+      </div>
+    </div>
+    <div class="kx-card" id="card-s4-mapa">
+      <div class="kx-row"><h3>Mapa das árvores avaliadas</h3>
+        <select class="kx-select" id="kx-s4-cor" aria-label="Cor dos pontos">
+          <option value="decisao">Cor por decisão</option>
+          <option value="zona">Cor por zona de construção</option>
+        </select></div>
+      <p class="kx-note">Posição GPS de cada árvore avaliada no Survey 4. Passe o cursor sobre um ponto para ver a etiqueta, a espécie e as medidas.</p>
+      <div class="kx-map" data-draw="c-map-s4" data-source="s4_arvores"></div>
+    </div>
+    <div class="kx-card" id="card-s4-crit">
+      <h3>Critérios de translocação por espécie</h3>
+      <p class="kx-note">Contagens calculadas a partir das árvores avaliadas; taxa de sobrevivência, potencial, aptidão e prioridade vêm da folha de critérios.</p>
+      <div class="kx-tbox"><table class="kx-table" data-source="s4_especies" data-row-key="especie">
+        <thead><tr><th data-field="especie">Espécie</th><th data-field="arvores" data-fmt="int" class="n">Árvores</th><th data-field="pct" data-fmt="pct1" class="n">% do total</th><th data-field="translocar" data-fmt="int" class="n">Translocar</th><th data-field="reter" data-fmt="int" class="n">Reter</th><th data-field="remover" data-fmt="int" class="n">Remover</th><th data-field="sobrevivencia_estimada">Sobrevivência estimada</th><th data-field="potencial">Potencial</th><th data-field="aptidao">Aptidão</th><th data-field="prioridade">Prioridade</th></tr></thead>
+        <tbody data-draw="tbl"></tbody></table></div>
+    </div>
+    <div class="kx-card" id="card-s4-tec">
+      <h3>Especificações técnicas de transplante</h3>
+      <p class="kx-note">Referência por espécie e classe de tamanho: DAP recomendado, torrão, equipamento, tempos de viveiro e poda radicular.</p>
+      <div class="kx-tbox"><table class="kx-table kx-plain" data-source="s4_tecnico" data-row-key="ordem">
+        <thead><tr><th data-field="ordem">Ordem</th><th data-field="especie">Espécie</th><th data-field="dap_recomendado_cm">DAP (cm)</th><th data-field="diametro_torrao">Torrão</th><th data-field="profundidade_raizes">Prof. raízes</th><th data-field="peso_estimado">Peso</th><th data-field="equipamento">Equipamento</th><th data-field="tempo_viveiro">Viveiro</th><th data-field="poda_radicular">Poda radicular</th><th data-field="sobrevivencia_pct">Sobrevivência (%)</th><th data-field="prioridade">Prioridade</th></tr></thead>
+        <tbody data-draw="tbl"></tbody></table></div>
+    </div>
+  </section>
+
+  <!-- ============ FAUNA ============ -->
+  <section class="kx-page" id="fauna" hidden>
+    <p class="kx-intro">Resgate e monitoria de fauna no Node A entre 20 de agosto e 21 de setembro de 2026, a partir dos registos do relatório final de fauna.</p>
+    <div class="kx-tiles">
+      <div class="kx-tile"><span class="kx-lab">Registos de fauna</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="registos" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Espécies</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="especies" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Ninhos registados</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="ninhos" data-fmt="int">—</b></div>
+      <div class="kx-tile"><span class="kx-lab">Ninhos ativos</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="ninhos_ativos" data-fmt="int">—</b></div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-fa-esp">
+        <h3>Registos por espécie</h3>
+        <p class="kx-note">Inclui resgates, tentativas sem resgate e observações.</p>
+        <div class="kx-chart" data-draw="c-fa-esp" data-source="fauna_especies"></div>
+      </div>
+      <div class="kx-card" id="card-fa-nin">
+        <h3>Ninhos por estado</h3>
+        <p class="kx-note">Estado do ninho na última verificação.</p>
+        <div class="kx-statgrid" data-draw="c-fa-nin" data-source="fauna_ninhos_estado"></div>
+      </div>
+    </div>
+    <div class="kx-card" id="card-fa-reg">
+      <h3>Registo do resgate de fauna</h3>
+      <div class="kx-tbox"><table class="kx-table" data-source="fauna_registos" data-row-key="id">
+        <thead><tr><th data-field="id">Espécie · tipo</th><th data-field="grupo">Grupo</th><th data-field="registos" data-fmt="int" class="n">Registos</th><th data-field="interpretacao">Interpretação</th><th data-field="periodo">Período</th></tr></thead>
+        <tbody data-draw="tbl"></tbody></table></div>
+    </div>
+    <div class="kx-grid">
+      <div class="kx-card" id="card-fa-ninhos">
+        <h3>Registo de ninhos</h3>
+        <div class="kx-tbox"><table class="kx-table kx-plain" data-source="fauna_ninhos" data-row-key="ninho">
+          <thead><tr><th data-field="ninho">Ninho</th><th data-field="data">Data</th><th data-field="area">Área</th><th data-field="estado">Estado</th><th data-field="acao">Ação de gestão</th></tr></thead>
+          <tbody data-draw="tbl"></tbody></table></div>
+      </div>
+      <div class="kx-card" id="card-fa-riscos">
+        <h3>Avaliação de riscos</h3>
+        <div class="kx-tbox"><table class="kx-table kx-plain" data-source="fauna_riscos" data-row-key="situacao">
+          <thead><tr><th data-field="situacao">Situação</th><th data-field="probabilidade">Probabilidade</th><th data-field="consequencia">Consequência</th><th data-field="risco">Risco</th><th data-field="medida">Medida de controlo</th></tr></thead>
+          <tbody data-draw="tbl"></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MÉTODOS ============ -->
+  <section class="kx-page" id="metodos" hidden>
+    <p class="kx-intro">Como cada número do dashboard é calculado a partir dos registos de campo. Os cálculos seguem as folhas de análise de cada survey.</p>
+    <div class="kx-card kx-methods" id="met-fito">
+      <h3>Fitossociologia</h3>
+      <dl>
+        <dt>Área basal (g)</dt><dd><code>g = π × DAP² / 40 000</code> em m², com DAP em cm. π = 3,14 nos Surveys 1 e 3 e 3,1416 no Survey 2, como nas folhas.</dd>
+        <dt>Densidade</dt><dd>Absoluta <code>DA = n / A</code> (indivíduos/ha). Relativa <code>DR = DA / ΣDA × 100</code>.</dd>
+        <dt>Frequência</dt><dd>Absoluta <code>FA = parcelas com a espécie / total de parcelas</code>. Relativa <code>FR = FA / ΣFA × 100</code>. Nos Surveys 1 e 3 os registos não identificam a parcela, por isso cada espécie conta como uma ocorrência (FA = 1/60), como na folha.</dd>
+        <dt>Dominância</dt><dd>Absoluta <code>DoA = Σg / A</code> (m²/ha). Relativa <code>DoR = DoA / ΣDoA × 100</code>.</dd>
+        <dt>IVI</dt><dd><code>IVI = DR + FR + DoR</code>. A soma de todas as espécies é 300.</dd>
+        <dt>Área amostrada (A)</dt><dd>60 ha nos Surveys 1 e 3. No Survey 2, 0,1 ha por parcela; a área de cada estrato é o número de parcelas × 0,1 ha (ver o separador Estratos).</dd>
+      </dl>
+    </div>
+    <div class="kx-card kx-methods" id="met-div">
+      <h3>Diversidade</h3>
+      <dl>
+        <dt>Shannon (H′)</dt><dd><code>H′ = −Σ pᵢ × ln pᵢ</code>, com pᵢ = nᵢ / N. Valores abaixo de 1,5 indicam diversidade baixa e entre 1,5 e 3,5 diversidade moderada.</dd>
+        <dt>Simpson (1 − D)</dt><dd><code>1 − Σ pᵢ²</code>: probabilidade de dois indivíduos ao acaso serem de espécies diferentes (0 a 1).</dd>
+        <dt>Pielou (J′)</dt><dd><code>J′ = H′ / ln S</code>, com S = número de espécies: uniformidade da distribuição dos indivíduos entre espécies (0 a 1).</dd>
+        <dt>Survey 2</dt><dd>Os índices usam o número de registos por espécie em cada grupo (árvores, regeneração, gramíneas, arbustos) e estrato.</dd>
+      </dl>
+    </div>
+    <div class="kx-card kx-methods" id="met-classes">
+      <h3>Classes e funções ecológicas</h3>
+      <dl>
+        <dt>Classes de DAP</dt><dd>5–10, 10–20, 20–30, 30–40, 40–50 e ≥50 cm. No Survey 4, até 50–60 e ≥60 cm.</dd>
+        <dt>Classes de altura</dt><dd>0–2, 2–5, 5–10, 10–15 e ≥15 m (Surveys 1 e 3); 0–2, 2–5, 5–10 e ≥10 m (árvores do Survey 2); &lt;3, 3–4, 4–5 e ≥5 m (Survey 4). Regeneração, gramíneas e arbustos usam as classes registadas no campo.</dd>
+        <dt>Funções ecológicas</dt><dd>Sombra: copa ≥ 5 m. Alimentação: árvores reprodutivas. Abrigo e carbono: DAP ≥ 30 cm. Solo: estabilização do solo registada no campo. Fixação de N: espécies da família Fabaceae.</dd>
+        <dt>Prioridade para retenção</dt><dd>Classes atribuídas na folha de análise dos Surveys 1 e 3, usadas tal como estão.</dd>
+      </dl>
+    </div>
+    <div class="kx-card kx-methods" id="met-fontes">
+      <h3>Fontes dos dados</h3>
+      <dl>
+        <dt>Surveys 1 e 3</dt><dd>Análise da Vegetação, folha "Dados": registo individual das árvores, com coordenadas GPS.</dd>
+        <dt>Survey 2</dt><dd>Resultados Survey 2 (Anelarda): folhas "Dados tratados", "Regeneration", "Grass" e "scribs".</dd>
+        <dt>Survey 4</dt><dd>Field Data Spreadsheet: árvores avaliadas com decisão (campo "intention") e zona de construção (campo "insideplot"), critérios de translocação e especificações técnicas.</dd>
+        <dt>Fauna</dt><dd>Tabelas do Relatório final da fauna (20 ago – 21 set 2026). As fichas de campo do Survey 5 ainda não têm registos.</dd>
+      </dl>
+    </div>
+  </section>
+</div>
+<p class="kx-foot">Dados: Surveys 1–4 de vegetação e Relatório final da fauna, Node A, Karingani Game Reserve.</p>
+</div>
+
+<script src="assets/vendor/d3.v7.9.0.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/runtime.js"></script>
+<script src="assets/js/calculos.js"></script>
+<script src="assets/js/graficos.js"></script>
+<script src="assets/js/desenhos.js"></script>
+<script src="assets/js/separadores.js"></script>
+</body>
+</html>
