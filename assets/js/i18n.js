@@ -1,11 +1,65 @@
 /* Languages: English (default) and Portuguese.
    - PAGE_PT: Portuguese text of every element marked data-i18n (the English text is in index.html).
-   - VALUES_EN: English for values that come from the data (categories, strata, fauna tables).
+   - VALUES_EN / VALUES_PT: translation of values that come from the data (categories, strata, fauna fields).
    - UI: short texts written by the charts and maps.
    The chosen language is kept in the browser and can be forced with ?lang=pt or ?lang=en. */
 (function () {
   'use strict';
   const PAGE_PT = {
+ "f06": "<span data-draw=\"val\" data-source=\"fauna_resumo\" data-field=\"ninhos_ativos\" data-fmt=\"int\">—</span> ativos",
+ "f06b": "<span data-draw=\"val\" data-source=\"fauna_resumo\" data-field=\"tocas_ativas\" data-fmt=\"int\">—</span> ativas",
+ "f01": "Registos de fauna, ninhos e tocas do levantamento de biodiversidade do Node A. Os registos marcados como aproximados estão na referência do local e não num ponto GPS exato.",
+ "f02": "Registos de fauna",
+ "f03": "<span data-draw=\"val\" data-source=\"fauna_resumo\" data-field=\"individuos\" data-fmt=\"int\">—</span> indivíduos",
+ "f04": "Espécies",
+ "f05": "Ninhos",
+ "f07": "Tocas",
+ "f08": "Registos de fauna",
+ "f09": "Resultado de cada registo",
+ "f10": "Percentagem dos registos de fauna pelo que aconteceu ao animal.",
+ "f11": "Registos por grupo taxonómico",
+ "f12": "Registos de fauna e respetiva percentagem por grupo.",
+ "f13": "Indivíduos por espécie",
+ "f14": "Número de animais registados de cada espécie.",
+ "f15": "Registos por local",
+ "f16": "Registos de fauna, ninhos e tocas em cada local.",
+ "f17": "Registos ao longo do tempo",
+ "f18": "Registos de fauna, ninhos e tocas em cada data de levantamento.",
+ "f19": "Onde foram feitos os registos",
+ "f20": "Posição GPS de cada registo, com cor por tipo. Passe o cursor sobre um ponto para ver os detalhes.",
+ "f21": "Registo de fauna",
+ "f22": "Referência",
+ "f23": "Data",
+ "f24": "Local",
+ "f25": "Espécie",
+ "f26": "Nome comum",
+ "f27": "Grupo",
+ "f28": "IUCN",
+ "f29": "Proteção (Moçambique)",
+ "f30": "Indivíduos",
+ "f31": "Resultado",
+ "f32": "Situação",
+ "f33": "Observações",
+ "f34": "Ninhos e tocas",
+ "f35": "Ninhos por estado",
+ "f36": "Estado na última verificação.",
+ "f37": "Árvores com ninhos",
+ "f38": "Espécies das árvores onde estão os ninhos registados.",
+ "f39": "Registo de ninhos",
+ "f40": "Ninho",
+ "f41": "Espécie de ave",
+ "f42": "Árvore",
+ "f43": "Altura da árvore (m)",
+ "f44": "Altura do ninho (m)",
+ "f45": "Estado",
+ "f46": "Ovos",
+ "f47": "Ação de gestão",
+ "f48": "Registo de tocas",
+ "f49": "Toca",
+ "f50": "Espécie / ocupante",
+ "f51": "Entradas",
+ "f52": "Resultado dos registos de fauna",
+ "f53": "Lido das observações de cada registo: <em>Translocado</em> (translocação concluída ou com sucesso), <em>Libertado</em> (ponto de libertação indicado), <em>Retirado da área de trabalho</em>, <em>Mantido no local</em> (mantido ou retido in situ), <em>Em monitoria</em> (mobilização não realizada), <em>Não recuperado</em> (o animal entrou num refúgio); nos restantes casos, <em>Observado</em>.",
  "t000": "Karingani - Dashboard de Monitoria",
  "t001": "A linha de base (Surveys 1 e 3) regista <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"individuos\" data-fmt=\"int\" data-source=\"s13_resumo\">—</b> árvores de <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"especies\" data-fmt=\"int\" data-source=\"s13_resumo\">—</b> espécies, com o mopane a representar <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"pct\" data-fmt=\"pct1\" data-source=\"s13_abund\" data-where=\"especie=Colophospermum mopane\">—</b> dos indivíduos. No Survey 4, <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"translocar\" data-fmt=\"int\" data-source=\"s4_resumo\">—</b> das <b class=\"dash-skeleton\" data-draw=\"val\" data-field=\"arvores\" data-fmt=\"int\" data-source=\"s4_resumo\">—</b> árvores avaliadas são candidatas a translocação.",
  "t002": "Vegetação · Surveys 1 e 3",
@@ -273,10 +327,13 @@
  "t264": "Survey 4",
  "t265": "Field Data Spreadsheet: árvores avaliadas com decisão (campo \"intention\") e zona de construção (campo \"insideplot\"), critérios de translocação e especificações técnicas.",
  "t266": "Fauna",
- "t267": "Tabelas do Relatório final da fauna (20 ago – 21 set 2026). As fichas de campo do Survey 5 ainda não têm registos.",
- "t268": "Dados: Surveys 1–4 de vegetação e Relatório final da fauna, Node A, Karingani Game Reserve."
+ "t267": "Exportação do levantamento de biodiversidade (CSV): registos de fauna, ninhos e tocas com data, local, posição GPS, dados da espécie e observações de campo.",
+ "t268": "Dados: Surveys 1–4 de vegetação e levantamento de biodiversidade do Node A, Karingani Game Reserve."
 };
   const VALUES_EN = {
+ "Registos de fauna": "Fauna records",
+ "Ninhos": "Nests",
+ "Tocas": "Burrows",
  "Reprodutiva": "Reproductive",
  "Não reprodutiva": "Non-reproductive",
  "Sem registo": "Not recorded",
@@ -384,6 +441,33 @@
  "Proteção in situ ou relocalização controlada": "In-situ protection or controlled relocation",
  "Zona de exclusão e monitoramento": "Exclusion zone and monitoring"
 };
+  const VALUES_PT = {
+ "Fauna": "Fauna",
+ "Nest": "Ninho",
+ "Burrow": "Toca",
+ "Reptile": "Réptil",
+ "Amphibian": "Anfíbio",
+ "Bird": "Ave",
+ "Mammal": "Mamífero",
+ "Translocated": "Translocado",
+ "Released": "Libertado",
+ "Removed from work area": "Retirado da área de trabalho",
+ "Kept in place": "Mantido no local",
+ "Under monitoring": "Em monitoria",
+ "Not recovered": "Não recuperado",
+ "Observed": "Observado",
+ "Active": "Ativo",
+ "Inactive": "Inativo",
+ "Least Concern (LC)": "Pouco preocupante (LC)",
+ "Not assessed at species level": "Não avaliada ao nível da espécie",
+ "Protected": "Protegida",
+ "Locally protected": "Protegida localmente",
+ "Not determined": "Não determinado",
+ "Not listed": "Não listada",
+ "Bird species not determined": "Espécie de ave não determinada",
+ "Potential fauna burrow/ground cavity": "Possível toca ou cavidade no solo",
+ "Construction Area": "Área de construção"
+};
   const UI = {
  "en": {
   "title": "Karingani - Monitoring Dashboard",
@@ -419,7 +503,12 @@
   const PAGE_EN = new Map();
   window.kxLang = () => lang;
   window.kxT = (k) => (UI[lang] && UI[lang][k]) || UI.en[k] || k;
-  window.kxV = (v) => (lang === 'en' && typeof v === 'string' && Object.prototype.hasOwnProperty.call(VALUES_EN, v)) ? VALUES_EN[v] : v;
+  const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+  window.kxV = (v) => {
+    if (typeof v !== 'string') return v;
+    if (lang === 'en') return has(VALUES_EN, v) ? VALUES_EN[v] : v;
+    return has(VALUES_PT, v) ? VALUES_PT[v] : v;
+  };
   function apply(l) {
     lang = l === 'pt' ? 'pt' : 'en';
     document.querySelectorAll('[data-i18n]').forEach((el) => {

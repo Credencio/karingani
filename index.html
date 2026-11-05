@@ -288,44 +288,80 @@
 </section>
 <!-- ============ FAUNA ============ -->
 <section class="kx-page" hidden="" id="fauna">
-<p class="kx-intro" data-i18n="t200">Fauna rescue and monitoring at Node A between 20 August and 21 September 2026, from the records in the final fauna report.</p>
+<p class="kx-intro" data-i18n="f01">Fauna, nest and burrow records from the Node A biodiversity survey. Records marked as approximate are placed at the site reference rather than an exact GPS point.</p>
 <div class="kx-tiles">
-<div class="kx-tile"><span class="kx-lab" data-i18n="t201">Fauna records</span><b class="kx-num dash-skeleton" data-draw="val" data-field="registos" data-fmt="int" data-source="fauna_resumo">—</b></div>
-<div class="kx-tile"><span class="kx-lab" data-i18n="t202">Species</span><b class="kx-num dash-skeleton" data-draw="val" data-field="especies" data-fmt="int" data-source="fauna_resumo">—</b></div>
-<div class="kx-tile"><span class="kx-lab" data-i18n="t203">Nests recorded</span><b class="kx-num dash-skeleton" data-draw="val" data-field="ninhos" data-fmt="int" data-source="fauna_resumo">—</b></div>
-<div class="kx-tile"><span class="kx-lab" data-i18n="t204">Active nests</span><b class="kx-num dash-skeleton" data-draw="val" data-field="ninhos_ativos" data-fmt="int" data-source="fauna_resumo">—</b></div>
+<div class="kx-tile"><span class="kx-lab" data-i18n="f02">Fauna records</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="registos" data-fmt="int">—</b><span class="kx-sub" data-i18n="f03"><span data-draw="val" data-source="fauna_resumo" data-field="individuos" data-fmt="int">—</span> individuals</span></div>
+<div class="kx-tile"><span class="kx-lab" data-i18n="f04">Species</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="especies" data-fmt="int">—</b></div>
+<div class="kx-tile"><span class="kx-lab" data-i18n="f05">Nests</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="ninhos" data-fmt="int">—</b><span class="kx-sub" data-i18n="f06"><span data-draw="val" data-source="fauna_resumo" data-field="ninhos_ativos" data-fmt="int">—</span> active</span></div>
+<div class="kx-tile"><span class="kx-lab" data-i18n="f07">Burrows</span><b class="kx-num dash-skeleton" data-draw="val" data-source="fauna_resumo" data-field="tocas" data-fmt="int">—</b><span class="kx-sub" data-i18n="f06b"><span data-draw="val" data-source="fauna_resumo" data-field="tocas_ativas" data-fmt="int">—</span> active</span></div>
+</div>
+<h2 class="kx-h2" id="fa-registos" data-i18n="f08">Fauna records</h2>
+<div class="kx-grid">
+<div class="kx-card" id="card-fa-res">
+<h3 data-i18n="f09">Outcome of each record</h3>
+<p class="kx-note" data-i18n="f10">Share of fauna records by what happened to the animal.</p>
+<div class="kx-statgrid" data-draw="c-fa-res" data-source="fauna_resultados"></div>
+</div>
+<div class="kx-card" id="card-fa-grp">
+<h3 data-i18n="f11">Records by taxon group</h3>
+<p class="kx-note" data-i18n="f12">Fauna records and their share by group.</p>
+<div class="kx-statgrid" data-draw="c-fa-grp" data-source="fauna_grupos"></div>
+</div>
 </div>
 <div class="kx-grid">
 <div class="kx-card" id="card-fa-esp">
-<h3 data-i18n="t205">Records by species</h3>
-<p class="kx-note" data-i18n="t206">Includes rescues, unsuccessful rescue attempts and sightings.</p>
+<h3 data-i18n="f13">Individuals by species</h3>
+<p class="kx-note" data-i18n="f14">Number of animals recorded for each species.</p>
 <div class="kx-chart" data-draw="c-fa-esp" data-source="fauna_especies"></div>
 </div>
-<div class="kx-card" id="card-fa-nin">
-<h3 data-i18n="t207">Nests by status</h3>
-<p class="kx-note" data-i18n="t208">Nest status at the latest check.</p>
-<div class="kx-statgrid" data-draw="c-fa-nin" data-source="fauna_ninhos_estado"></div>
+<div class="kx-card" id="card-fa-loc">
+<h3 data-i18n="f15">Records by site</h3>
+<p class="kx-note" data-i18n="f16">Fauna, nest and burrow records at each site.</p>
+<div class="kx-chart" data-draw="c-fa-loc" data-source="fauna_locais"></div>
 </div>
-</div>
-<div class="kx-card" id="card-fa-reg">
-<h3 data-i18n="t209">Fauna rescue log</h3>
-<div class="kx-tbox"><table class="kx-table" data-row-key="id" data-source="fauna_registos">
-<thead><tr><th data-field="id" data-i18n="t210">Species · type</th><th data-field="grupo" data-i18n="t211">Group</th><th class="n" data-field="registos" data-fmt="int" data-i18n="t212">Records</th><th data-field="interpretacao" data-i18n="t213">Interpretation</th><th data-field="periodo" data-i18n="t214">Period</th></tr></thead>
-<tbody data-draw="tbl"></tbody></table></div>
 </div>
 <div class="kx-grid">
+<div class="kx-card" id="card-fa-dat">
+<h3 data-i18n="f17">Records over time</h3>
+<p class="kx-note" data-i18n="f18">Fauna, nest and burrow records on each survey date.</p>
+<div class="kx-chart" data-draw="c-fa-dat" data-source="fauna_datas"></div>
+</div>
+<div class="kx-card" id="card-fa-map">
+<h3 data-i18n="f19">Where the records were made</h3>
+<p class="kx-note" data-i18n="f20">GPS position of each record, coloured by type. Hover over a point for details.</p>
+<div class="kx-map" data-draw="c-fa-map" data-source="fauna"></div>
+</div>
+</div>
+<div class="kx-card" id="card-fa-log">
+<h3 data-i18n="f21">Fauna log</h3>
+<div class="kx-tbox"><table class="kx-table kx-fauna kx-ftab" data-source="fauna" data-row-key="ref" data-kx-filter="tipo=Fauna">
+<thead><tr><th data-field="ref" data-i18n="f22">Reference</th><th data-field="data" data-i18n="f23">Date</th><th data-field="local" data-i18n="f24">Site</th><th data-field="especie" data-i18n="f25">Species</th><th data-field="nome_en" data-field-pt="nome_pt" data-i18n="f26">Common name</th><th data-field="grupo" data-i18n="f27">Group</th><th data-field="iucn" data-i18n="f28">IUCN</th><th data-field="protecao_moz" data-i18n="f29">Protection (Mozambique)</th><th data-field="individuos" data-fmt="int" class="n" data-i18n="f30">Individuals</th><th data-field="resultado" data-i18n="f31">Outcome</th><th data-field="observacoes" data-i18n="f32">Situation</th><th data-field="notas" data-i18n="f33">Remarks</th></tr></thead>
+<tbody data-draw="tbl"></tbody></table></div>
+</div>
+<h2 class="kx-h2" id="fa-ninhos" data-i18n="f34">Nests and burrows</h2>
+<div class="kx-grid">
+<div class="kx-card" id="card-fa-nin">
+<h3 data-i18n="f35">Nests by status</h3>
+<p class="kx-note" data-i18n="f36">Status at the latest check.</p>
+<div class="kx-statgrid" data-draw="c-fa-nin" data-source="fauna_ninhos_estado"></div>
+</div>
+<div class="kx-card" id="card-fa-arv">
+<h3 data-i18n="f37">Nest trees</h3>
+<p class="kx-note" data-i18n="f38">Tree species holding the recorded nests.</p>
+<div class="kx-chart" data-draw="c-fa-arv" data-source="fauna_arvores_ninho"></div>
+</div>
+</div>
 <div class="kx-card" id="card-fa-ninhos">
-<h3 data-i18n="t215">Nest log</h3>
-<div class="kx-tbox"><table class="kx-table kx-plain" data-row-key="ninho" data-source="fauna_ninhos">
-<thead><tr><th data-field="ninho" data-i18n="t216">Nest</th><th data-field="data" data-i18n="t217">Date</th><th data-field="area" data-i18n="t218">Area</th><th data-field="estado" data-i18n="t219">Status</th><th data-field="acao" data-i18n="t220">Management action</th></tr></thead>
+<h3 data-i18n="f39">Nest log</h3>
+<div class="kx-tbox"><table class="kx-table kx-plain kx-ftab" data-source="fauna" data-row-key="ref" data-kx-filter="tipo=Nest">
+<thead><tr><th data-field="id_registo" data-i18n="f40">Nest</th><th data-field="data" data-i18n="f23">Date</th><th data-field="local" data-i18n="f24">Site</th><th data-field="especie" data-i18n="f41">Bird species</th><th data-field="arvore_ninho" data-i18n="f42">Nest tree</th><th data-field="altura_arvore_m" data-fmt="d1" class="n" data-i18n="f43">Tree height (m)</th><th data-field="altura_ninho_m" data-fmt="d1" class="n" data-i18n="f44">Nest height (m)</th><th data-field="estado" data-i18n="f45">Status</th><th data-field="ovos" data-fmt="int" class="n" data-i18n="f46">Eggs</th><th data-field="observacoes" data-i18n="f32">Situation</th><th data-field="acao" data-i18n="f47">Management action</th></tr></thead>
 <tbody data-draw="tbl"></tbody></table></div>
 </div>
-<div class="kx-card" id="card-fa-riscos">
-<h3 data-i18n="t221">Risk assessment</h3>
-<div class="kx-tbox"><table class="kx-table kx-plain" data-row-key="situacao" data-source="fauna_riscos">
-<thead><tr><th data-field="situacao" data-i18n="t222">Situation</th><th data-field="probabilidade" data-i18n="t223">Likelihood</th><th data-field="consequencia" data-i18n="t224">Consequence</th><th data-field="risco" data-i18n="t225">Risk</th><th data-field="medida" data-i18n="t226">Control measure</th></tr></thead>
+<div class="kx-card" id="card-fa-tocas">
+<h3 data-i18n="f48">Burrow log</h3>
+<div class="kx-tbox"><table class="kx-table kx-plain kx-ftab" data-source="fauna" data-row-key="ref" data-kx-filter="tipo=Burrow">
+<thead><tr><th data-field="id_registo" data-i18n="f49">Burrow</th><th data-field="data" data-i18n="f23">Date</th><th data-field="local" data-i18n="f24">Site</th><th data-field="especie" data-i18n="f50">Species / occupant</th><th data-field="estado" data-i18n="f45">Status</th><th data-field="entradas" data-fmt="int" class="n" data-i18n="f51">Entrances</th><th data-field="observacoes" data-i18n="f32">Situation</th><th data-field="notas" data-i18n="f33">Remarks</th><th data-field="acao" data-i18n="f47">Management action</th></tr></thead>
 <tbody data-draw="tbl"></tbody></table></div>
-</div>
 </div>
 </section>
 <!-- ============ MÉTODOS ============ -->
@@ -357,6 +393,7 @@
 <dt data-i18n="t251">DBH classes</dt><dd data-i18n="t252">5–10, 10–20, 20–30, 30–40, 40–50 and ≥50 cm. In Survey 4, up to 50–60 and ≥60 cm.</dd>
 <dt data-i18n="t253">Height classes</dt><dd data-i18n="t254">0–2, 2–5, 5–10, 10–15 and ≥15 m (Surveys 1 and 3); 0–2, 2–5, 5–10 and ≥10 m (Survey 2 trees); &lt;3, 3–4, 4–5 and ≥5 m (Survey 4). Regeneration, grasses and shrubs use the classes recorded in the field.</dd>
 <dt data-i18n="t255">Ecological functions</dt><dd data-i18n="t256">Shade: crown ≥ 5 m. Food: reproductive trees. Shelter and carbon: DBH ≥ 30 cm. Soil: soil stabilisation recorded in the field. N fixation: species of the Fabaceae family.</dd>
+<dt data-i18n="f52">Outcome of fauna records</dt><dd data-i18n="f53">Read from each record's observations and remarks: <em>Translocated</em> (translocation completed or successful), <em>Released</em> (release point given), <em>Removed from work area</em>, <em>Kept in place</em> (maintained or retained in situ), <em>Under monitoring</em> (mobilisation not carried out), <em>Not recovered</em> (animal entered a refuge), otherwise <em>Observed</em>.</dd>
 <dt data-i18n="t257">Retention priority</dt><dd data-i18n="t258">Classes assigned in the Surveys 1 and 3 analysis sheet, used as they are.</dd>
 </dl>
 </div>
@@ -366,12 +403,12 @@
 <dt data-i18n="t260">Surveys 1 and 3</dt><dd data-i18n="t261">Vegetation Analysis, "Dados" sheet: individual tree records with GPS coordinates.</dd>
 <dt data-i18n="t262">Survey 2</dt><dd data-i18n="t263">Survey 2 Results (Anelarda): "Dados tratados", "Regeneration", "Grass" and "scribs" sheets.</dd>
 <dt data-i18n="t264">Survey 4</dt><dd data-i18n="t265">Field Data Spreadsheet: assessed trees with decision ("intention" field) and construction zone ("insideplot" field), translocation criteria and technical specifications.</dd>
-<dt data-i18n="t266">Fauna</dt><dd data-i18n="t267">Tables from the final fauna report (20 Aug – 21 Sep 2026). The Survey 5 field forms have no records yet.</dd>
+<dt data-i18n="t266">Fauna</dt><dd data-i18n="t267">Biodiversity survey export (CSV): fauna records, nests and burrows with date, site, GPS position, species data and field remarks.</dd>
 </dl>
 </div>
 </section>
 </div>
-<p class="kx-foot" data-i18n="t268">Data: vegetation Surveys 1–4 and final fauna report, Node A, Karingani Game Reserve.</p>
+<p class="kx-foot" data-i18n="t268">Data: vegetation Surveys 1–4 and the Node A biodiversity survey, Karingani Game Reserve.</p>
 </div>
 
 

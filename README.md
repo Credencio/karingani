@@ -1,6 +1,6 @@
 # Karingani - Monitoring Dashboard
 
-Static dashboard with the results of the vegetation surveys (Surveys 1 to 4) and the final fauna report for Node A, Karingani Game Reserve. It needs no server or database: the browser reads the JSON files in `data/` and runs every calculation (IVI, DBH and height classes, diversity indices, translocation decisions).
+Static dashboard with the results of the vegetation surveys (Surveys 1 to 4) and the biodiversity survey (fauna, nests and burrows) for Node A, Karingani Game Reserve. It needs no server or database: the browser reads the JSON files in `data/` and runs every calculation (IVI, DBH and height classes, diversity indices, translocation decisions).
 
 The site opens in **English**; the **EN | PT** switch at the top right changes it to Portuguese. *Versão portuguesa destas instruções: [LEIAME.md](LEIAME.md).*
 
@@ -12,7 +12,7 @@ The site opens in **English**; the **EN | PT** switch at the top right changes i
 | Species profile | Pick a species: its figures in the three surveys, DBH distribution and GPS map |
 | Strata · Survey 2 | Sampling effort by stratum, classes per group, diversity indices, IVI, dominant species |
 | Translocation · Survey 4 | Decisions (translocate, retain, remove), DBH and height classes, tree map, translocation criteria and transplanting specifications |
-| Fauna · Final report | Records by species, nests, risk matrix |
+| Fauna | Fauna records by outcome, group, species, site and date, map, nests and burrows |
 | Methods | Formulas and rules behind every figure |
 
 ## Structure
@@ -56,7 +56,7 @@ scripts/atualizar_dados.py rebuilds data/*.json from the Excel workbooks
 
 - Open in Portuguese directly with `?lang=pt` (or force English with `?lang=en`), e.g. `https://<user>.github.io/karingani-dashboard/?lang=pt#fauna`. The visitor's last choice is remembered in their browser.
 - Page text is in English in `index.html`; the Portuguese version of every element marked `data-i18n` is in `PAGE_PT` in `assets/js/i18n.js`.
-- Values that come from the data (categories, strata, fauna tables) are stored in Portuguese in the JSON files; their English translation is in `VALUES_EN`. If you add a new category to the data, add its translation to `VALUES_EN` too; without it the value shows in Portuguese in both languages.
+- Values that come from the data are translated by two lists in `assets/js/i18n.js`: `VALUES_EN` (vegetation categories, stored in Portuguese) and `VALUES_PT` (fauna categories, stored in English). If a new category appears in the data, add its translation there; without it the value shows in its original language. Free-text fauna remarks are shown as recorded.
 - Scientific names of species and families are not translated.
 
 ## Preview locally
@@ -78,11 +78,12 @@ pip install openpyxl
 python scripts/atualizar_dados.py \
   --survey13 "Analise da Vegetacao survey 1 e 3.xlsx" \
   --survey2  "Resultados Survey 2 - Anelarda.xlsx" \
-  --survey4  "Survey 4 Field Data Spreadsheet.xlsx"
+  --survey4  "Survey 4 Field Data Spreadsheet.xlsx" \
+  --fauna    "Biodiversity_legacy_import.csv"
 git add data && git commit -m "Update data" && git push
 ```
 
-You can pass only the surveys that changed. The script expects the same sheet and column names as the original workbooks and reports any missing column. The fauna files (`data/fauna_registos.json`, `data/fauna_ninhos.json`, `data/fauna_riscos.json`) were transcribed from the fauna report and are edited by hand.
+You can pass only the surveys that changed. The script expects the same sheet and column names as the original workbooks and reports any missing column. Fauna, nest and burrow records come from the biodiversity survey export: add `--fauna "Biodiversity_legacy_import.csv"` to rebuild `data/fauna.json`. The outcome of each fauna record (translocated, released, kept in place…) is read from its remarks with the rules listed in the Methods tab.
 
 ## Embed in Google Sites
 

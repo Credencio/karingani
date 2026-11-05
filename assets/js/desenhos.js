@@ -24,7 +24,8 @@ dash.draw('tbl', (el) => {
     const tr = document.createElement('tr');
     for (const th of ths) {
       const td = document.createElement('td');
-      const v = r[th.dataset.field];
+      const field = (window.kxLang && window.kxLang() === 'pt' && th.dataset.fieldPt) || th.dataset.field;
+      const v = r[field] != null ? r[field] : r[th.dataset.field];
       td.textContent = kx.fmt(v, th.dataset.fmt);
       if (th.classList.contains('n')) td.className = 'n';
       else if (typeof v === 'string' && v.length > 50) td.className = 'w';
@@ -87,7 +88,6 @@ dash.draw('c-s4-classes', (el) => {
 });
 
 // Fauna
-dash.draw('c-fa-esp', (el) => { if (!kx.prep(el, ['fauna_especies'])) return; kx.bars(el, { rows: dash.data('fauna_especies').data, cat: 'especie', series: [{ key: 'registos', label: 'Registos' }], horizontal: true, fmt: 'int' }); });
 // Ficha de espécie
 const kxSp = () => dash.params().especie || 'Colophospermum mopane';
 dash.draw('sel-especie', (sel) => {
@@ -138,4 +138,30 @@ dash.draw('c-map-s4', (el) => {
 });
 document.querySelectorAll('#kx-s4-cor').forEach(s => s.addEventListener('change', () => dash.draw('c-map-s4')));
 
-dash.draw('c-fa-nin', (el) => { if (!kx.prep(el, ['fauna_ninhos_estado'])) return; kx.cards(el, { rows: dash.data('fauna_ninhos_estado').data, cat: 'estado_grupo', val: 'ninhos', pct: 'pct' }); });
+
+// Fauna
+const kxFaSeries = [{ key: 'fauna', label: 'Registos de fauna' }, { key: 'ninhos', label: 'Ninhos' }, { key: 'tocas', label: 'Tocas' }];
+dash.draw('c-fa-res', (el) => { if (!kx.prep(el, ['fauna_resultados'])) return; kx.cards(el, { rows: dash.data('fauna_resultados').data, cat: 'resultado', val: 'registos', pct: 'pct' }); });
+dash.draw('c-fa-grp', (el) => { if (!kx.prep(el, ['fauna_grupos'])) return; kx.cards(el, { rows: dash.data('fauna_grupos').data, cat: 'grupo', val: 'registos', pct: 'pct' }); });
+dash.draw('c-fa-nin', (el) => { if (!kx.prep(el, ['fauna_ninhos_estado'])) return; kx.cards(el, { rows: dash.data('fauna_ninhos_estado').data, cat: 'estado', val: 'ninhos', pct: 'pct' }); });
+dash.draw('c-fa-esp', (el) => { if (!kx.prep(el, ['fauna_especies'])) return; kx.bars(el, { rows: dash.data('fauna_especies').data, cat: 'especie', series: [{ key: 'individuos', label: 'Indivíduos' }], horizontal: true, fmt: 'int' }); });
+dash.draw('c-fa-arv', (el) => { if (!kx.prep(el, ['fauna_arvores_ninho'])) return; kx.bars(el, { rows: dash.data('fauna_arvores_ninho').data, cat: 'arvore', series: [{ key: 'ninhos', label: 'Ninhos' }], horizontal: true, fmt: 'int', color: dash.colors[1] }); });
+dash.draw('c-fa-loc', (el) => { if (!kx.prep(el, ['fauna_locais'])) return; kx.bars(el, { rows: dash.data('fauna_locais').data, cat: 'local', series: kxFaSeries, horizontal: true, fmt: 'int' }); });
+dash.draw('c-fa-dat', (el) => {
+  if (!kx.prep(el, ['fauna_datas'])) return;
+  const lang = window.kxLang ? window.kxLang() : 'en';
+  const f = new Intl.DateTimeFormat(lang === 'pt' ? 'pt-PT' : 'en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+  const rows = dash.data('fauna_datas').data.map(r => ({ ...r, dia: f.format(new Date(r.data + 'T00:00:00Z')) }));
+  kx.bars(el, { rows, cat: 'dia', series: kxFaSeries, fmt: 'int' });
+});
+dash.draw('c-fa-map', (el) => {
+  if (!kx.prep(el, ['fauna'])) return;
+  const rows = dash.data('fauna').data;
+  const tipos = ['Fauna', 'Nest', 'Burrow'];
+  kx.map(el, {
+    layers: tipos.map((tp, i) => ({ rows: rows.filter(r => r.tipo === tp), color: dash.colors[i], r: 4.5, alpha: 0.85 })),
+    pick: rows,
+    tip: (p) => [(p.id_registo || p.ref) + ' · ' + kx.fmt(p.especie), [kx.fmt(p.local) + ' · ' + p.data, kx.fmt(p.resultado || p.estado)]],
+    legend: tipos.map((tp, i) => ({ label: kxV(tp), color: dash.colors[i] }))
+  });
+});

@@ -7,9 +7,7 @@ window.DASH_SOURCES = {
   s4_arvores: 'data/s4_arvores.json',         // Survey 4: árvores avaliadas
   s4_criterios: 'data/s4_criterios.json',     // Survey 4: critérios de translocação
   s4_tecnico: 'data/s4_tecnico.json',         // Survey 4: especificações de transplante
-  fauna_registos: 'data/fauna_registos.json', // Relatório de fauna: registos
-  fauna_ninhos: 'data/fauna_ninhos.json',     // Relatório de fauna: ninhos
-  fauna_riscos: 'data/fauna_riscos.json'      // Relatório de fauna: matriz de risco
+  fauna: 'data/fauna.json'                    // Biodiversidade: registos de fauna, ninhos e tocas (CSV)
 };
 
 window.DASH_PARAMS = {

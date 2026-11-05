@@ -113,3 +113,9 @@
 .kx-lang button { appearance: none; border: 0; background: none; font: inherit; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); letter-spacing: .04em; color: var(--color-fg-muted); padding: 4px 12px; border-radius: 999px; cursor: pointer; }
 .kx-lang button[aria-pressed="true"] { background: var(--ink-1, #2f6f4e); color: #fff; }
 .kx-lang button:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+
+.kx-table.kx-fauna td:nth-child(n+11) { min-width: 16rem; }
+.kx-table.kx-fauna td:first-child { font-style: normal; white-space: nowrap; }
+.kx-table.kx-fauna td:nth-child(4) { font-style: italic; }
+.kx-table.kx-ftab td:nth-child(-n+3) { white-space: nowrap; }
+.kx-table.kx-fauna td:nth-child(7) { min-width: 9rem; }

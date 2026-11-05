@@ -291,25 +291,80 @@ dash.calc('s4_classes', {
 });
 
 /* ---------------- Cálculos: Fauna ---------------- */
+dash.calc('fauna_resumo', {
+  inputs: ['fauna'], title: 'Fauna · resumo',
+  description: 'Registos de fauna, indivíduos, espécies, ninhos e tocas (totais e ativos).',
+  fn: (fauna) => {
+    const F = fauna.filter(r => r.tipo === 'Fauna'), N = fauna.filter(r => r.tipo === 'Nest'), B = fauna.filter(r => r.tipo === 'Burrow');
+    return [{ registos: F.length, individuos: F.reduce((a, r) => a + (Number(r.individuos) || 0), 0), especies: new Set(F.map(r => r.especie)).size,
+      ninhos: N.length, ninhos_ativos: N.filter(r => r.estado === 'Active').length, tocas: B.length, tocas_ativas: B.filter(r => r.estado === 'Active').length }];
+  }
+});
+dash.calc('fauna_resultados', {
+  inputs: ['fauna'], title: 'Fauna · resultado dos registos',
+  description: 'Número e percentagem de registos de fauna por resultado (translocado, libertado, mantido no local, etc.).',
+  fn: (fauna) => {
+    const ORDEM = ['Translocated', 'Released', 'Removed from work area', 'Kept in place', 'Under monitoring', 'Not recovered', 'Observed'];
+    const F = fauna.filter(r => r.tipo === 'Fauna'), m = new Map();
+    for (const r of F) m.set(r.resultado, (m.get(r.resultado) || 0) + 1);
+    return [...m].map(([resultado, registos]) => ({ resultado, registos, pct: registos / F.length * 100 }))
+      .sort((a, b) => ORDEM.indexOf(a.resultado) - ORDEM.indexOf(b.resultado));
+  }
+});
+dash.calc('fauna_grupos', {
+  inputs: ['fauna'], title: 'Fauna · grupos taxonómicos',
+  description: 'Registos e indivíduos de fauna por grupo taxonómico, com a percentagem dos registos.',
+  fn: (fauna) => {
+    const F = fauna.filter(r => r.tipo === 'Fauna'), m = new Map();
+    for (const r of F) { const o = m.get(r.grupo) || { grupo: r.grupo, registos: 0, individuos: 0 }; o.registos++; o.individuos += Number(r.individuos) || 0; m.set(r.grupo, o); }
+    return [...m.values()].map(o => ({ ...o, pct: o.registos / F.length * 100 })).sort((a, b) => b.registos - a.registos);
+  }
+});
 dash.calc('fauna_especies', {
-  inputs: ['fauna_registos'], title: 'Fauna · registos por espécie',
-  description: 'Soma dos registos de cada espécie (resgates, tentativas e observações).',
-  fn: (fauna_registos) => {
-    const by = new Map();
-    for (const r of fauna_registos) { const o = by.get(r.especie) || { especie: r.especie, grupo: r.grupo, registos: 0 }; o.registos += Number(r.registos); by.set(r.especie, o); }
-    return [...by.values()].sort((a, b) => b.registos - a.registos);
+  inputs: ['fauna'], title: 'Fauna · espécies',
+  description: 'Registos e indivíduos de cada espécie de fauna, com o nome comum.',
+  fn: (fauna) => {
+    const m = new Map();
+    for (const r of fauna.filter(x => x.tipo === 'Fauna')) {
+      const o = m.get(r.especie) || { especie: r.especie, grupo: r.grupo, nome_en: r.nome_en, nome_pt: r.nome_pt, registos: 0, individuos: 0 };
+      o.registos++; o.individuos += Number(r.individuos) || 0; o.nome_en = o.nome_en || r.nome_en; o.nome_pt = o.nome_pt || r.nome_pt; m.set(r.especie, o);
+    }
+    return [...m.values()].sort((a, b) => b.individuos - a.individuos || b.registos - a.registos);
+  }
+});
+dash.calc('fauna_locais', {
+  inputs: ['fauna'], title: 'Fauna · registos por local',
+  description: 'Número de registos de fauna, ninhos e tocas em cada local.',
+  fn: (fauna) => {
+    const m = new Map();
+    for (const r of fauna) { const k = r.local || '—'; const o = m.get(k) || { local: k, fauna: 0, ninhos: 0, tocas: 0, total: 0 }; o[r.tipo === 'Fauna' ? 'fauna' : r.tipo === 'Nest' ? 'ninhos' : 'tocas']++; o.total++; m.set(k, o); }
+    return [...m.values()].sort((a, b) => b.total - a.total || a.local.localeCompare(b.local));
+  }
+});
+dash.calc('fauna_datas', {
+  inputs: ['fauna'], title: 'Fauna · registos por data',
+  description: 'Número de registos de fauna, ninhos e tocas em cada data de levantamento.',
+  fn: (fauna) => {
+    const m = new Map();
+    for (const r of fauna) { const o = m.get(r.data) || { data: r.data, fauna: 0, ninhos: 0, tocas: 0 }; o[r.tipo === 'Fauna' ? 'fauna' : r.tipo === 'Nest' ? 'ninhos' : 'tocas']++; m.set(r.data, o); }
+    return [...m.values()].sort((a, b) => String(a.data).localeCompare(String(b.data)));
   }
 });
 dash.calc('fauna_ninhos_estado', {
-  inputs: ['fauna_ninhos'], title: 'Fauna · ninhos por estado',
-  description: 'Número e percentagem de ninhos por estado agrupado (ativo, inativo, relocalizado, por reavaliar).',
-  fn: (fauna_ninhos) => {
-    const m = new Map(); for (const r of fauna_ninhos) m.set(r.estado_grupo, (m.get(r.estado_grupo) || 0) + 1);
-    return [...m].map(([estado_grupo, ninhos]) => ({ estado_grupo, ninhos, pct: ninhos / fauna_ninhos.length * 100 })).sort((a, b) => b.ninhos - a.ninhos);
+  inputs: ['fauna'], title: 'Fauna · ninhos por estado',
+  description: 'Número e percentagem de ninhos ativos e inativos.',
+  fn: (fauna) => {
+    const N = fauna.filter(r => r.tipo === 'Nest'), m = new Map();
+    for (const r of N) m.set(r.estado, (m.get(r.estado) || 0) + 1);
+    return [...m].map(([estado, ninhos]) => ({ estado, ninhos, pct: ninhos / N.length * 100 })).sort((a, b) => (a.estado === 'Active' ? -1 : 1) - (b.estado === 'Active' ? -1 : 1));
   }
 });
-dash.calc('fauna_resumo', {
-  inputs: ['fauna_registos', 'fauna_ninhos'], title: 'Fauna · resumo',
-  description: 'Total de registos de fauna, espécies, ninhos registados e ninhos ativos.',
-  fn: (fauna_registos, fauna_ninhos) => [{ registos: fauna_registos.reduce((a, r) => a + Number(r.registos), 0), especies: new Set(fauna_registos.map(r => r.especie)).size, ninhos: fauna_ninhos.length, ninhos_ativos: fauna_ninhos.filter(r => r.estado_grupo === 'Ativo').length }]
+dash.calc('fauna_arvores_ninho', {
+  inputs: ['fauna'], title: 'Fauna · árvores com ninhos',
+  description: 'Número de ninhos em cada espécie de árvore.',
+  fn: (fauna) => {
+    const m = new Map();
+    for (const r of fauna.filter(x => x.tipo === 'Nest' && x.arvore_ninho)) m.set(r.arvore_ninho, (m.get(r.arvore_ninho) || 0) + 1);
+    return [...m].map(([arvore, ninhos]) => ({ arvore, ninhos })).sort((a, b) => b.ninhos - a.ninhos);
+  }
 });

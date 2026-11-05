@@ -7,10 +7,11 @@ Uso (a partir da pasta do repositório):
     python scripts/atualizar_dados.py \
         --survey13 "Analise da Vegetacao survey 1 e 3.xlsx" \
         --survey2  "Resultados Survey 2 - Anelarda.xlsx" \
-        --survey4  "Survey 4 Field Data Spreadsheet.xlsx"
+        --survey4  "Survey 4 Field Data Spreadsheet.xlsx" \
+        --fauna    "Biodiversity_legacy_import.csv"
 
-Pode passar só os surveys que mudaram. Os ficheiros de fauna (data/fauna_*.json)
-são editados à mão, a partir do relatório de fauna.
+
+Pode passar só os surveys que mudaram.
 
 O script espera a mesma estrutura de folhas e colunas das folhas originais:
   Surveys 1 e 3: folha "Dados " (com espaço no fim) e tabela espécie/família em
@@ -153,13 +154,79 @@ def survey4(path):
     save("s4_tecnico", tec)
 
 
+def _clean(text):
+    """Remove automatic notes (survey period, import source) from free-text fields."""
+    import re
+    text = (text or "").strip()
+    text = re.sub(r"\s*Survey period:[^.]*\.?", "", text)
+    text = re.sub(r"\s*(Source survey|Source):.*$", "", text)
+    text = re.sub(r"\s*Field identification: [^.]*\.", "", text)
+    return text.strip(" .;") or None
+
+
+def _outcome(r):
+    """Outcome of a fauna record, read from its observations and remarks (rules listed in the Methods tab)."""
+    s = ((r.get("observations") or "") + " " + (r.get("fa_remarks") or "")).lower()
+    if "not recovered" in s or "recovery was not possible" in s:
+        return "Not recovered"
+    if "translocat" in s and ("success" in s or "completed" in s):
+        return "Translocated"
+    if "under monitoring" in s or "not carried out" in s:
+        return "Under monitoring"
+    if "maintained" in s or "retained in situ" in s:
+        return "Kept in place"
+    if "removed from the immediate work area" in s or "safely removed" in s:
+        return "Removed from work area"
+    if "point of release" in s or "released" in s:
+        return "Released"
+    return "Observed"
+
+
+def fauna(path):
+    import csv
+    print("Fauna:", path)
+    with open(path, encoding="utf-8-sig", newline="") as f:
+        rows = list(csv.DictReader(f))
+    tipo = {"fauna": "Fauna", "nest": "Nest", "burrow": "Burrow"}
+    out = []
+    for r in rows:
+        kind = tipo.get((r.get("survey_methods") or "").strip())
+        if not kind:
+            continue
+        esp = r.get("sp_scientific") or r.get("species_other") or sp(r.get("species"))
+        if esp in ("other", "unidentified"):
+            esp = r.get("species_other")
+        active = (r.get("ne_active") or r.get("bu_active") or "").strip().lower()
+        comments = r.get("comments") or ""
+        rec = {
+            "ref": r.get("form_ref"), "tipo": kind, "data": r.get("survey_date"), "local": (r.get("plot_number") or "").strip() or None,
+            "lat": num(r.get("Latitude") or r.get("pc_latitude")), "lon": num(r.get("Longitude") or r.get("pc_longitude")),
+            "localizacao_aproximada": "LOCATION APPROXIMATE" in comments,
+            "grupo": (r.get("taxon_group") or "").strip().capitalize() or None, "especie": (esp or "").strip() or None,
+            "nome_en": r.get("sp_common_en") or None, "nome_pt": r.get("sp_common_pt") or None,
+            "iucn": r.get("sp_iucn") or None, "protecao_moz": r.get("sp_moz_protection") or None,
+            "individuos": num(r.get("fa_individuals")), "prioridade": r.get("fa_priority") or None,
+            "resultado": _outcome(r) if kind == "Fauna" else None,
+            "estado": ("Active" if active == "yes" else "Inactive" if active == "no" else None) if kind != "Fauna" else None,
+            "id_registo": r.get("ne_nest_id") or r.get("bu_burrow_id") or r.get("form_ref"),
+            "arvore_ninho": r.get("ne_tree_species") or None, "altura_arvore_m": num(r.get("ne_tree_height")),
+            "altura_ninho_m": num(r.get("ne_nest_height")), "ovos": num(r.get("ne_eggs")), "entradas": num(r.get("bu_entrances")),
+            "observacoes": _clean(r.get("observations")),
+            "notas": _clean(r.get("fa_remarks") or r.get("ne_remarks") or r.get("bu_remarks")),
+            "acao": _clean(comments.split(" Imported from")[0]) if kind != "Fauna" else None,
+        }
+        out.append(rec)
+    save("fauna", out)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--survey13", help="Excel da Análise da Vegetação, surveys 1 e 3")
     ap.add_argument("--survey2", help="Excel de resultados do Survey 2")
     ap.add_argument("--survey4", help="Excel de dados de campo do Survey 4")
+    ap.add_argument("--fauna", help="CSV de biodiversidade (fauna, ninhos e tocas)")
     a = ap.parse_args()
-    if not (a.survey13 or a.survey2 or a.survey4):
+    if not (a.survey13 or a.survey2 or a.survey4 or a.fauna):
         ap.print_help()
         return
     os.makedirs(DATA, exist_ok=True)
@@ -169,6 +236,8 @@ def main():
         survey2(a.survey2)
     if a.survey4:
         survey4(a.survey4)
+    if a.fauna:
+        fauna(a.fauna)
     print("Concluído. Faça commit da pasta data/ para atualizar o site.")
 
 

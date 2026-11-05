@@ -1,6 +1,6 @@
 # Karingani - Dashboard de Monitoria
 
-Dashboard estático com os resultados dos levantamentos de vegetação (Surveys 1 a 4) e do relatório final de fauna do Node A, Karingani Game Reserve. Não precisa de servidor nem de base de dados: o navegador lê os ficheiros JSON da pasta `data/` e faz todos os cálculos (IVI, classes de DAP e altura, índices de diversidade, decisões de translocação).
+Dashboard estático com os resultados dos levantamentos de vegetação (Surveys 1 a 4) e do levantamento de biodiversidade (fauna, ninhos e tocas) do Node A, Karingani Game Reserve. Não precisa de servidor nem de base de dados: o navegador lê os ficheiros JSON da pasta `data/` e faz todos os cálculos (IVI, classes de DAP e altura, índices de diversidade, decisões de translocação).
 
 ## Conteúdo
 
@@ -10,7 +10,7 @@ Dashboard estático com os resultados dos levantamentos de vegetação (Surveys 
 | Ficha de espécie | Escolha uma espécie: números nos três surveys, distribuição de DAP e mapa GPS |
 | Estratos · Survey 2 | Amostragem por estrato, classes por grupo, índices de diversidade, IVI, espécies dominantes |
 | Translocação · Survey 4 | Decisões (translocar, reter, remover), classes de DAP e altura, mapa das árvores, critérios e especificações de transplante |
-| Fauna · Relatório final | Registos por espécie, ninhos, matriz de risco |
+| Fauna | Registos de fauna por resultado, grupo, espécie, local e data, mapa, ninhos e tocas |
 | Métodos | Fórmulas e regras usadas em cada cálculo |
 
 ## Estrutura
@@ -69,7 +69,8 @@ pip install openpyxl
 python scripts/atualizar_dados.py \
   --survey13 "Analise da Vegetacao survey 1 e 3.xlsx" \
   --survey2  "Resultados Survey 2 - Anelarda.xlsx" \
-  --survey4  "Survey 4 Field Data Spreadsheet.xlsx"
+  --survey4  "Survey 4 Field Data Spreadsheet.xlsx" \
+  --fauna    "Biodiversity_legacy_import.csv"
 git add data && git commit -m "Atualizar dados" && git push
 ```
 
@@ -89,5 +90,5 @@ Os ficheiros de fauna (`data/fauna_registos.json`, `data/fauna_ninhos.json`, `da
 O site abre em inglês. O botão **EN | PT** no canto superior direito troca para português, e a escolha fica guardada no navegador. Também pode forçar a língua no endereço: `?lang=pt` ou `?lang=en` (por exemplo `https://<utilizador>.github.io/karingani-dashboard/?lang=pt#fauna`).
 
 - Os textos da página estão em inglês no `index.html`; a versão portuguesa de cada texto marcado com `data-i18n` está em `PAGE_PT`, no `assets/js/i18n.js`.
-- Os valores que vêm dos dados (categorias, estratos, tabelas de fauna) estão em português nos ficheiros JSON; a tradução inglesa de cada valor está em `VALUES_EN`. Se acrescentar uma categoria nova nos dados, acrescente também a sua tradução em `VALUES_EN`; sem ela, o valor aparece em português nas duas línguas.
+- Os valores que vêm dos dados são traduzidos por duas listas no `assets/js/i18n.js`: `VALUES_EN` (categorias da vegetação, guardadas em português) e `VALUES_PT` (categorias da fauna, guardadas em inglês). Se aparecer uma categoria nova nos dados, acrescente a tradução aí; sem ela, o valor aparece na língua original. As observações de texto livre da fauna aparecem como foram registadas.
 - Os nomes científicos das espécies e famílias não são traduzidos.
